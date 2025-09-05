@@ -168,10 +168,10 @@
 <script>
     const quizzes = [
         // ドリンクカテゴリのクイズ
-        { "category": "ドリンク", "name": "カフェラテ", "question": "カフェラテの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["エスプレッソ + スチームミルク", "エスプレッソ + お湯", "紅茶 + ミルク"], "answer": "エスプレッソ + スチームミルク" },
-        { "category": "ドリンク", "name": "抹茶ラテ", "question": "抹茶ラテの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["抹茶 + お湯 + ミルク", "抹茶 + お湯", "抹茶 + スチームミルク"], "answer": "抹茶 + お湯 + ミルク" },
-        { "category": "ドリンク", "name": "キャラメルマキアート", "question": "キャラメルマキアートの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["キャラメルソース + ミルク + エスプレッソ", "エスプレッソ + ミルク + キャラメルソース", "エスプレッソ + ミルク + キャラメルソース + バニラシロップ"], "answer": "エスプレッソ + ミルク + キャラメルソース + バニラシロップ" },
-        { "category": "ドリンク", "name": "ココア", "question": "ココアの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["ココアパウダー + お湯 + ミルク", "ココアパウダー + ミルク", "ココアパウダー + お湯"], "answer": "ココアパウダー + お湯 + ミルク" },
+        { "category": "ドリンク", "name": "ドリンクドリンク", "question": "ドリンクの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["エスプレッソ + スチームミルク", "エスプレッソ + お湯", "紅茶 + ミルク"], "answer": "エスプレッソ + スチームミルク" },
+        { "category": "ドリンク", "name": "ドリンクドリンク", "question": "ドリンクの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["抹茶 + お湯 + ミルク", "抹茶 + お湯", "抹茶 + スチームミルク"], "answer": "抹茶 + お湯 + ミルク" },
+        { "category": "ドリンク", "name": "ドリンクドリンク", "question": "ドリンクの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["キャラメルソース + ミルク + エスプレッソ", "エスプレッソ + ミルク + キャラメルソース", "エスプレッソ + ミルク + キャラメルソース + バニラシロップ"], "answer": "エスプレッソ + ミルク + キャラメルソース + バニラシロップ" },
+        { "category": "ドリンク", "name": "ドリンクドリンク", "question": "ドリンクの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ["ココアパウダー + お湯 + ミルク", "ココアパウダー + ミルク", "ココアパウダー + お湯"], "answer": "ココアパウダー + お湯 + ミルク" },
         
         // キッチンカテゴリのクイズ (難易度付き)
         { "category": "キッチン", "difficulty": "single_star", "name": "出汁巻きたまご", "question": "出汁巻きたまごを温める時間が正しいものを選択してください。", "type": "multiple_choice", "options": ['900W 3分', '900W 1分', '500W 3分', '500W 1分'], "answer": '900W 3分' },
@@ -184,9 +184,9 @@
         { "category": "キッチン", "difficulty": "single_star", "name": "梅クラゲ", "question": "梅クラゲの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ['器に半分にした大葉を敷く + 梅クラゲ(30g)を盛り付け','器に半分にした大葉を敷く + 梅クラゲ(35g)を盛り付け', '器に半分にした大葉を敷く + 梅クラゲ(40g)を盛り付け','器に半分にした大葉を敷く + 梅クラゲ(45g)を盛り付け'], "answer": '器に半分にした大葉を敷く + 梅クラゲ(30g)を盛り付け' },
         { "category": "キッチン", "difficulty": "single_star", "name": "チャンジャ", "question": "チャンジャの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ['器に半分にした大葉を敷く + チャンジャ(30g)を盛り付け + ネギをかける','器に半分にした大葉を敷く + チャンジャ(35g)を盛り付け + のりをかける', '器に半分にした大葉を敷く + チャンジャ(40g)を盛り付け + のりをかける','器に半分にした大葉を敷く + チャンジャ(45g)を盛り付け + ネギをかける'], "answer": '器に半分にした大葉を敷く + チャンジャ(30g)を盛り付け + ネギをかける' },
         { "category": "キッチン", "difficulty": "single_star", "name": "長芋わさび", "question": "長芋わさびの作り方として正しいものを選択してください。", "type": "multiple_choice", "options": ['器に長いもを80g盛る + 刻みのりを乗せる','器に長いもを60g盛る + 刻みのりを乗せる', '器に長いもを40g盛る + 刻みのりを乗せる','器に長いもを70g盛る + 刻みのりを乗せる'], "answer": '器に長いもを80g盛る + 刻みのりを乗せる' },
-        { "category": "キッチン", "difficulty": "single_star", "name": "冷やしトマト", "question": "冷やしトマトの調理を正しい順に並び替えてください。", "type": "reordering", "steps": ['トマトのヘタ部分を切る', 'トマト１個を半分に切る','トマトを６等分に切る','マヨネーズとサラダを添える'], "answer": ['トマトのヘタ部分を切る', 'トマト１個を半分に切る','トマトを６等分に切る','マヨネーズとサラダを添える'] },
-        { "category": "キッチン", "difficulty": "single_star", "name": "かわぽん", "question": "かわぽんの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラ', 'とりかわを盛りつけ', 'ポン酢','ネギと大根おろしを添える'], "answer": ['皿に大葉を敷く', 'オニスラ', 'とりかわを盛りつけ', 'ポン酢','ネギと大根おろしを添える'] },
-        { "category": "キッチン", "difficulty": "single_star", "name": "ささぽん", "question": "ささぽんの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラ', 'ささみを盛りつけ', 'ポン酢','ネギと大根おろしを添える'], "answer": ['皿に大葉を敷く', 'オニスラ', 'ささみを盛りつけ', 'ポン酢','ネギと大根おろしを添える'] },
+        { "category": "キッチン", "difficulty": "single_star", "name": "冷やしトマト", "question": "冷やしトマトの調理を正しい順に並び替えてください。", "type": "reordering", "steps": ['トマトのヘタ部分を切る', 'トマト１個を半分に切る','トマトを６等分に切る','マヨネーズとサラダを添える'], "answer": ['トマト１個を半分に切る', 'トマトのヘタ部分を切る','トマトを６等分に切る','マヨネーズとサラダを添える'] },
+        { "category": "キッチン", "difficulty": "single_star", "name": "かわぽん", "question": "かわぽんの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラを盛る', 'とりかわを盛りつけ', 'ポン酢','ネギと大根おろしを添える'], "answer": ['皿に大葉を敷く', 'オニスラを盛る', 'とりかわを盛りつけ', 'ポン酢','ネギと大根おろしを添える'] },
+        { "category": "キッチン", "difficulty": "single_star", "name": "ささぽん", "question": "ささぽんの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラを盛る', 'ささみを盛りつけ', 'ポン酢','ネギと大根おろしを添える'], "answer": ['皿に大葉を敷く', 'オニスラを盛る', 'ささみを盛りつけ', 'ポン酢','ネギと大根おろしを添える'] },
         { "category": "キッチン", "difficulty": "single_star", "name": "たたききゅうり", "question": "たたききゅうりの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマを散らす'], "answer": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマを散らす'] },
         { "category": "キッチン", "difficulty": "single_star", "name": "とりのたたき", "question": "とりのたたきの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['器にオニスラを盛る', '大葉を乗せる', 'たたきを並べる', '皿にネギ、しょうがを添える'], "answer": ['器にオニスラを盛る', '大葉を乗せる', 'たたきを並べる', '皿にネギ、しょうがを添える'] },
         { "category": "キッチン", "difficulty": "single_star", "name": "鶏わさび和え", "question": "鶏わさび和えの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ×わさびを盛り付ける', 'しょうゆをかける','のりを盛り付ける'], "answer": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ×わさびを盛り付ける', 'しょうゆをかける','のりを盛り付ける'] },
@@ -201,11 +201,11 @@
         { "category": "キッチン", "difficulty": "double_star", "name": "じゃこ天", "question": "じゃこ天の調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["両面3分間揚げる + 天紙 + ネギ、しょうが","両面2分間揚げる + 天紙 + ネギ、しょうが", "両面3分間揚げる + 天紙 + ネギ、大根おろし","両面3分間揚げる + 天紙 + ワサビ"], "answer": "両面3分間揚げる + 天紙 + ネギ、しょうが" },
         { "category": "キッチン", "difficulty": "double_star", "name": "若鶏のからあげ", "question": "若鶏のからあげの調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["唐揚げ粉 + 5分間揚げる + サラダ + レモン + マヨネーズ","片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ", "片栗粉 + 4分間揚げる + 天紙 + レモン + ケチャップ","片栗粉 + 4分間揚げる + サラダ + レモン + ケチャップ"], "answer": "片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ" },
         { "category": "キッチン", "difficulty": "double_star", "name": "チキン南蛮", "question": "チキン南蛮の調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["5分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ","6分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ", "4分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ","7分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ"], "answer": "5分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ" },
-        { "category": "キッチン", "difficulty": "triple_star", "name": "ももたたき", "question": "ももたたきの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["器にオニスラを盛る", "大葉を乗せる", "ももたたきを並べる", "ネギとしょうがを添える"], "answer": ["器にオニスラを盛る", "大葉を乗せる", "ももたたきを並べる", "ネギとしょうがを添える"] },
-        { "category": "キッチン", "difficulty": "triple_star", "name": "生つくね", "question": "生つくねの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "つくねを盛る", "生うずらを添える", "タレをかける", "ネギをかける"], "answer": ["皿に大葉を乗せる", "つくねを盛る", "生うずらを添える", "タレをかける", "ネギをかける"] },
-        { "category": "キッチン", "difficulty": "triple_star", "name": "生つくねユッケ", "question": "生つくねユッケの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "生うずらを添える", "ユッケダレをかける", "ネギと白ごまをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "生うずらを添える", "ユッケダレをかける", "ネギと白ごまをかける"] },
-        { "category": "キッチン", "difficulty": "triple_star", "name": "生つくね梅肉和え", "question": "生つくね梅肉和えの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "梅肉をかける", "のりをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "梅肉をかける", "のりをかける"] },
-        { "category": "キッチン", "difficulty": "triple_star", "name": "生つくねわさび和え", "question": "生つくねわさび和えの作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "わさびを添える", "しょうゆをかける", "のりをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "わさびを添える", "しょうゆをかける", "のりをかける"] }
+        { "category": "キッチン", "difficulty": "triple_star", "name": "名前", "question": "名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["器にオニスラを盛る", "大葉を乗せる", "ももたたきを並べる", "ネギとしょうがを添える"], "answer": ["器にオニスラを盛る", "大葉を乗せる", "ももたたきを並べる", "ネギとしょうがを添える"] },
+        { "category": "キッチン", "difficulty": "triple_star", "name": "名前", "question": "名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "つくねを盛る", "生うずらを添える", "タレをかける", "ネギをかける"], "answer": ["皿に大葉を乗せる", "つくねを盛る", "生うずらを添える", "タレをかける", "ネギをかける"] },
+        { "category": "キッチン", "difficulty": "triple_star", "name": "名前", "question": "名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "生うずらを添える", "ユッケダレをかける", "ネギと白ごまをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "生うずらを添える", "ユッケダレをかける", "ネギと白ごまをかける"] },
+        { "category": "キッチン", "difficulty": "triple_star", "name": "名前ドリンクドリンク", "question": "名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "梅肉をかける", "のりをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "梅肉をかける", "のりをかける"] },
+        { "category": "キッチン", "difficulty": "triple_star", "name": "名前", "question": "名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "わさびを添える", "しょうゆをかける", "のりをかける"], "answer": ["皿に大葉を乗せる", "オニスラを盛る", "生つくねを盛る", "わさびを添える", "しょうゆをかける", "のりをかける"] }
     ];
 
     let currentQuizzes = [];
@@ -215,6 +215,7 @@
     let firstSelectedItem = null;
     let currentCategory = '';
     let currentDifficulty = '';
+    let correctCount = 0;
 
     // DOM要素の取得
     let categorySelectEl;
@@ -241,7 +242,11 @@
         document.getElementById('double-star-btn').addEventListener('click', () => startQuiz('double_star'));
         document.getElementById('triple-star-btn').addEventListener('click', () => startQuiz('triple_star'));
         document.getElementById('random-btn').addEventListener('click', () => startQuiz('random'));
-        document.getElementById('back-to-category-btn').addEventListener('click', resetApp);
+        document.getElementById('back-to-category-btn').addEventListener('click', () => {
+            currentCategory = '';
+            difficultySelectEl.classList.add('hidden');
+            categorySelectEl.classList.remove('hidden');
+        });
         
         submitBtnEl.addEventListener('click', submitAnswer);
         nextBtnEl.addEventListener('click', nextQuiz);
@@ -273,19 +278,19 @@
     
     function startQuiz(difficulty) {
         currentQuizIndex = 0;
+        correctCount = 0;
         selectedOption = null;
         reorderedSteps = [];
         currentDifficulty = difficulty;
 
-        // 前回の結果メッセージを削除
         const existingResult = document.getElementById('temp-result-message');
         if (existingResult) {
-          existingResult.remove();
+            existingResult.remove();
         }
 
         if (currentCategory === 'ドリンク') {
             currentQuizzes = quizzes.filter(q => q.category === 'ドリンク');
-        } else {
+        } else if (currentCategory === 'キッチン') {
             if (difficulty === 'random') {
                 currentQuizzes = quizzes.filter(q => q.category === 'キッチン');
             } else {
@@ -319,10 +324,9 @@
         submitBtnEl.classList.remove('hidden');
         nextBtnEl.classList.add('hidden');
         
-        // 前回の結果メッセージを削除
         const existingResult = document.getElementById('temp-result-message');
         if (existingResult) {
-          existingResult.remove();
+            existingResult.remove();
         }
 
         if (quiz.type === 'multiple_choice') {
@@ -418,6 +422,10 @@
                 isCorrect = true;
             }
         }
+
+        if (isCorrect) {
+            correctCount++;
+        }
         
         displayResult(isCorrect, quiz);
         
@@ -457,7 +465,7 @@
 
         resultDiv.appendChild(messageP);
         if (!isCorrect) {
-          resultDiv.appendChild(explanationP);
+            resultDiv.appendChild(explanationP);
         }
 
         quizQuestionEl.insertAdjacentElement('afterend', resultDiv);
@@ -473,7 +481,8 @@
         } else {
             quizScreenEl.innerHTML = `
                 <h2 class="text-2xl font-bold mb-4">クイズ終了！</h2>
-                <p class="mb-8">お疲れ様でした。すべての問題が完了しました。</p>
+                <p class="mb-2">お疲れ様でした。すべての問題が完了しました。</p>
+                <p class="text-xl font-semibold mb-8">正解数: ${correctCount} / ${currentQuizzes.length}</p>
                 <button id="end-screen-btn" class="btn-base btn-primary w-full">もう一度挑戦する</button>
             `;
             const endScreenBtn = document.getElementById('end-screen-btn');
