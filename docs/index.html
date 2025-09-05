@@ -64,6 +64,7 @@
             transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
             display: flex;
             align-items: center;
+            text-align: left; /* テキストを左寄せに */
         }
         .reorder-item:hover {
             background-color: #d1d5db;
@@ -204,7 +205,7 @@
         { "category": "キッチン", "difficulty": "double_star", "name": "なんこつ唐揚げ", "question": "なんこつ唐揚げの調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["片栗粉 + 3分間揚げる + 天紙 + レモン","片栗粉 + 3分間揚げる + 天紙 + レモン", "片栗粉 + 2分間揚げる + 天紙 + レモン","唐揚げ粉 + 2分間揚げる + 天紙 + レモン"], "answer": "唐揚げ粉 + 2分間揚げる + 天紙 + レモン" },
         { "category": "キッチン", "difficulty": "double_star", "name": "かわパリ", "question": "かわパリの調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["片栗粉+唐揚げ粉 + 3分間揚げる + 天紙 + レモン","片栗粉 + 3分間揚げる + 天紙 + レモン", "片栗粉 + 2分間揚げる + 天紙 + レモン","小麦粉+唐揚げ粉 + 2分間揚げる + 天紙 + レモン"], "answer": "小麦粉+唐揚げ粉 + 2分間揚げる + 天紙 + レモン" },
         { "category": "キッチン", "difficulty": "double_star", "name": "じゃこ天", "question": "じゃこ天の調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["両面3分間揚げる + 天紙 + ネギ、しょうが","両面2分間揚げる + 天紙 + ネギ、しょうが", "両面3分間揚げる + 天紙 + ネギ、大根おろし","両面3分間揚げる + 天紙 + ワサビ"], "answer": "両面3分間揚げる + 天紙 + ネギ、しょうが" },
-        { "category": "キッチン", "difficulty": "double_star", "name": "若鶏のからあげ", "question": "若鶏のからあげの調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["唐揚げ粉 + 5分間揚げる + サラダ + レモン + マヨネーズ","片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ", "片栗粉 + 4分間揚げる + 天紙 + レモン + ケチャップ","片栗粉 + 4分間揚げる + サラダ + レモン + ケチャップ"], "answer": "片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ" },
+        { "category": "キッチン", "difficulty": "double_star", "name": "若鶏のからあげ", "question": "若鶏のからあげの調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["唐揚げ粉 + 5分間揚げる + サラダ + レモン + マヨネーズ","片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ", "片栗粉 + 4分間揚げる + 天紙 + レモン + ケチャップ","片栗粉 + 4分間揚げる + サラダ + レモン + ケチャップ"], "answer": "片栗粉 + 5分間揚げる + サラда + レモン + マヨネーズ" },
         { "category": "キッチン", "difficulty": "double_star", "name": "チキン南蛮", "question": "チキン南蛮の調理で正しいのはどれか。。", "type": "multiple_choice", "options": ["5分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ","6分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ", "4分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ","7分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ"], "answer": "5分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ" },
         { "category": "キッチン", "difficulty": "triple_star", "name": "名前名前", "question": "名前名前の作り方を正しい順に並び替えてください。", "type": "reordering", "steps": ["1", "2", "3", "4", "5"] },
     ];
@@ -213,7 +214,7 @@
     let currentQuizIndex = 0;
     let selectedOption = null;
     let reorderedSteps = [];
-    let firstSelectedItem = null; // ★変更点: タップで選択された最初のアイテムを保持
+    let firstSelectedItem = null;
     let currentCategory = '';
     let currentDifficulty = '';
 
@@ -231,7 +232,6 @@
     let resultMessageEl;
     let correctAnswerEl;
     
-    // イベントリスナーの設定をまとめた関数
     function setupEventListeners() {
         document.getElementById('drink-category-btn').addEventListener('click', () => {
             currentCategory = 'ドリンク';
@@ -253,9 +253,7 @@
         document.getElementById('reset-app-btn').addEventListener('click', resetApp);
     }
 
-    // アプリケーションを初期化
     function initializeApp() {
-        // DOM要素を初期化
         categorySelectEl = document.getElementById('category-select');
         difficultySelectEl = document.getElementById('difficulty-select');
         quizScreenEl = document.getElementById('quiz-screen');
@@ -271,7 +269,6 @@
         
         setupEventListeners();
 
-        // URLパラメータをチェックして、直接クイズを開始する
         const params = new URLSearchParams(window.location.search);
         const urlCategory = params.get('category');
         const urlDifficulty = params.get('difficulty');
@@ -282,7 +279,6 @@
         }
     }
     
-    // クイズ開始
     function startQuiz(difficulty) {
         currentQuizIndex = 0;
         selectedOption = null;
@@ -292,7 +288,6 @@
         nextBtnEl.classList.add('hidden');
         submitBtnEl.classList.remove('hidden');
 
-        // カテゴリと難易度に基づいてクイズをフィルタリング
         if (currentCategory === 'ドリンク') {
             currentQuizzes = quizzes.filter(q => q.category === 'ドリンク');
         } else {
@@ -303,7 +298,6 @@
             }
         }
         
-        // フィルタリングされたクイズをシャッフル
         if (currentQuizzes.length > 0) {
             shuffleArray(currentQuizzes);
         }
@@ -321,7 +315,6 @@
         renderQuiz();
     }
 
-    // クイズ表示
     function renderQuiz() {
         const quiz = currentQuizzes[currentQuizIndex];
         quizCounterEl.textContent = `問題 ${currentQuizIndex + 1} / ${currentQuizzes.length}`;
@@ -334,7 +327,6 @@
         correctAnswerEl.textContent = '';
         
         if (quiz.type === 'multiple_choice') {
-            // 選択肢をシャッフルする
             const shuffledOptions = [...quiz.options];
             shuffleArray(shuffledOptions);
 
@@ -357,7 +349,7 @@
         }
     }
 
-    // ★変更点: 並び替えリストの表示（タップ方式）
+    // ★変更点: 並び替えリストの表示（番号付き）
     function renderReorderingList() {
         optionsAreaEl.innerHTML = '';
         const list = document.createElement('ul');
@@ -365,7 +357,8 @@
         reorderedSteps.forEach((step, index) => {
             const item = document.createElement('li');
             item.className = 'reorder-item';
-            item.textContent = step;
+            // 番号を表示するHTMLを追加
+            item.innerHTML = `<span class="item-number mr-4 font-bold text-lg text-gray-500">${index + 1}.</span><span class="flex-1">${step}</span>`;
             item.setAttribute('data-index', index);
             item.addEventListener('click', handleReorderTap);
             list.appendChild(item);
@@ -373,36 +366,26 @@
         optionsAreaEl.appendChild(list);
     }
 
-    // ★変更点: タップによる並び替えのイベントハンドラ
     function handleReorderTap(e) {
         const tappedItem = e.currentTarget;
 
         if (firstSelectedItem === null) {
-            // 1回目のタップ：アイテムを選択状態にする
             firstSelectedItem = tappedItem;
             firstSelectedItem.classList.add('selected');
         } else {
-            // 2回目のタップ：アイテムを入れ替える
             const firstIndex = parseInt(firstSelectedItem.getAttribute('data-index'));
             const secondIndex = parseInt(tappedItem.getAttribute('data-index'));
 
-            // 選択状態のクラスを解除
             firstSelectedItem.classList.remove('selected');
             
             if (firstIndex !== secondIndex) {
-                // 配列内の要素を入れ替え
                 [reorderedSteps[firstIndex], reorderedSteps[secondIndex]] = [reorderedSteps[secondIndex], reorderedSteps[firstIndex]];
-                // リストを再描画
                 renderReorderingList();
             }
-            // 選択状態をリセット
             firstSelectedItem = null;
         }
     }
-    
-    // ★削除: ドラッグ＆ドロップ関連の関数はすべて不要になったため削除
 
-    // メッセージボックスを表示する関数
     function createMessageBox(message) {
         const messageBox = document.createElement('div');
         messageBox.className = 'message-box bg-blue-200';
@@ -414,9 +397,7 @@
         }, 2000);
     }
     
-    // 回答判定
     function submitAnswer() {
-        // ★変更点: 回答時に選択状態を解除
         if (firstSelectedItem) {
             firstSelectedItem.classList.remove('selected');
             firstSelectedItem = null;
@@ -461,12 +442,11 @@
         nextBtnEl.classList.remove('hidden');
     }
 
-    // 次のクイズへ
     function nextQuiz() {
         currentQuizIndex++;
         selectedOption = null;
         reorderedSteps = [];
-        firstSelectedItem = null; // ★変更点: 選択状態をリセット
+        firstSelectedItem = null;
         if (currentQuizIndex < currentQuizzes.length) {
             renderQuiz();
         } else {
@@ -482,13 +462,10 @@
         }
     }
 
-    // アプリケーションをリセット
     function resetApp() {
-        // ページをリロードして初期状態に戻す
         window.location.href = window.location.origin + window.location.pathname;
     }
     
-    // 配列をシャッフルするヘルパー関数
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -496,7 +473,6 @@
         }
     }
 
-    // アプリの初回ロード時に初期化
     document.addEventListener('DOMContentLoaded', initializeApp);
 
 </script>
