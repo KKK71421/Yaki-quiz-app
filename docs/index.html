@@ -105,11 +105,11 @@
     <h1 class="text-3xl font-bold mb-8 text-blue-600">メモ帳</h1>
 
     <div id="difficulty-select" class="space-y-4">
-        <h2 class="text-2xl font-semibold mb-4">担当を選択してください</h2>
+        <h2 class="text-2xl font-semibold mb-4">選択してください</h2>
         <div class="flex flex-col space-y-4 max-w-sm mx-auto">
             <button id="single-star-btn" class="btn-base btn-primary">刺し場</button>
             <button id="double-star-btn" class="btn-base btn-primary">揚げ場</button>
-            <button id="triple-star-btn" class="btn-base btn-primary">焼き場 (クイズ)</button>
+            <button id="triple-star-btn" class="btn-base btn-primary">焼き場</button>
         </div>
     </div>
 
@@ -346,14 +346,14 @@
             btn.onclick = () => {
                 if (choice === quiz.answer) {
                     btn.classList.add('correct');
-                    feedback.textContent = "正解！⭕";
+                    feedback.textContent = "正解";
                     feedback.className = "mt-4 text-center font-bold text-lg text-green-600";
                     feedback.classList.remove('hidden');
                     nextBtn.classList.remove('hidden');
                     Array.from(area.children).forEach(b => b.disabled = true);
                 } else {
                     btn.classList.add('incorrect');
-                    feedback.textContent = "不正解！❌";
+                    feedback.textContent = "不正解";
                     feedback.className = "mt-4 text-center font-bold text-lg text-red-600";
                     feedback.classList.remove('hidden');
                 }
