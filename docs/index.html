@@ -7,105 +7,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1f2937; }
         .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background-color: #ffffff;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            text-align: center;
+            max-width: 600px; margin: 1rem auto; padding: 1.5rem;
+            background-color: #ffffff; border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center; position: relative;
         }
-        .btn-base {
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            transition: all 0.2s ease-in-out;
-            border: 2px solid transparent;
+        .header-back-btn {
+            position: absolute; top: 1.25rem; left: 1.25rem;
+            display: flex; align-items: center; justify-content: center;
+            width: 2.5rem; height: 2.5rem; background-color: #f3f4f6;
+            border-radius: 50%; cursor: pointer; transition: all 0.2s;
         }
-        .btn-primary {
-            background-color: #3b82f6;
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background-color: #2563eb;
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background-color: #e5e7eb;
-            color: #1f2937;
-        }
-        .menu-item-btn {
-            width: 100%;
-            text-align: left;
-            background-color: #f3f4f6;
-            color: #1f2937;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .menu-item-btn:hover {
-            background-color: #e5e7eb;
-        }
-        .quiz-choice-btn {
-            width: 100%;
-            text-align: left;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 2px solid #e5e7eb;
-            transition: 0.2s;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-        .quiz-choice-btn:hover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-        .correct {
-            border-color: #10b981 !important;
-            background-color: #ecfdf5 !important;
-            color: #065f46;
-        }
-        .incorrect {
-            border-color: #ef4444 !important;
-            background-color: #fef2f2 !important;
-            color: #991b1b;
-        }
-        .step-list {
-            text-align: left;
-            list-style: none;
-            padding: 0;
-            margin-top: 1rem;
-        }
-        .step-list li {
-            background-color: #eff6ff;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            border-left: 5px solid #3b82f6;
-        }
-        .step-list li strong {
-            display: inline-block;
-            width: 1.5rem;
-            text-align: center;
-            margin-right: 0.5rem;
-            color: #1e40af;
-        }
+        .btn-base { padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 9999px; transition: 0.2s; border: 2px solid transparent; }
+        .btn-primary { background-color: #3b82f6; color: #ffffff; }
+        .btn-secondary { background-color: #e5e7eb; color: #1f2937; }
+        .menu-item-btn { width: 100%; text-align: left; background-color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
+        .quiz-choice-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 0.5rem; border: 2px solid #e5e7eb; margin-bottom: 0.5rem; font-weight: 600; }
+        .correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b; }
+        .step-list { text-align: left; list-style: none; padding: 0; margin-top: 1rem; }
+        .step-list li { background-color: #eff6ff; padding: 1rem; margin-bottom: 0.75rem; border-radius: 0.5rem; font-weight: 600; border-left: 5px solid #3b82f6; }
+        .image-container { width: 100%; margin: 1rem 0; border-radius: 0.5rem; overflow: hidden; background-color: #f9fafb; border: 1px solid #e5e7eb; }
+        .image-container img { width: 100%; height: auto; display: block; }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-start justify-center min-h-screen">
 
 <div id="app" class="container">
-    <h1 class="text-3xl font-bold mb-8 text-blue-600">メモ帳</h1>
+    <div id="global-back-btn" class="header-back-btn hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </div>
+
+    <h1 id="app-title" class="text-3xl font-bold mb-8 text-blue-600">キッチンメモ</h1>
 
     <div id="difficulty-select" class="space-y-4">
-        <h2 class="text-2xl font-semibold mb-4">選択してください</h2>
         <div class="flex flex-col space-y-4 max-w-sm mx-auto">
             <button id="single-star-btn" class="btn-base btn-primary">刺し場</button>
             <button id="double-star-btn" class="btn-base btn-primary">揚げ場</button>
@@ -116,13 +55,13 @@
     <div id="menu-list-screen" class="hidden text-left">
         <h2 id="menu-list-heading" class="text-2xl font-semibold mb-6 text-center text-blue-500"></h2>
         <div id="menu-options-area" class="space-y-2"></div>
-        <button id="back-to-difficulty-btn" class="mt-8 btn-base btn-secondary w-full">戻る</button>
     </div>
 
     <div id="procedure-screen" class="hidden text-left">
         <h3 id="procedure-name" class="text-2xl font-bold mb-4 text-center"></h3>
+        <div id="image-area" class="image-container hidden"><img id="procedure-img" src="" alt="見本"></div>
         <div id="procedure-content-area"></div>
-        <button id="back-to-menu-list-btn" class="mt-8 btn-base btn-primary w-full">メニューリストに戻る</button>
+        <button id="back-to-menu-list-btn" class="mt-8 btn-base btn-primary w-full">リストに戻る</button>
     </div>
 
     <div id="quiz-screen" class="hidden text-left">
@@ -130,200 +69,126 @@
         <p class="text-center text-gray-500 mb-6 font-semibold">正しい味付け・仕上げを選んでください</p>
         <div id="quiz-choices-area" class="space-y-3"></div>
         <div id="quiz-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
-        <button id="next-from-quiz-btn" class="mt-8 btn-base btn-primary w-full hidden">メニューリストに戻る</button>
+        <button id="next-from-quiz-btn" class="mt-8 btn-base btn-primary w-full hidden">完了</button>
     </div>
 </div>
 
 <script>
     const quizzes = [
-        // --- 刺し場 (single_star) ---
-        { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる' },
-        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'] },
-        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '器に半分にした大葉を敷く + たこわさ(30g)を盛り付け' },
-        { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '器に半分にした大葉を敷く + 梅クラゲ(30g)を盛り付け' },
-        { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '器に半分にした大葉を敷く + チャンジャ(30g)を盛り付け + ネギをかける' },
-        { "difficulty": "single_star", "name": "かわぽん", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラ', 'とりかわを盛りつけ', 'ネギと大根おろし','ポン酢'] },
-        { "difficulty": "single_star", "name": "ささぽん", "type": "reordering", "steps": ['皿に大葉を敷く', 'オニスラ', 'ささみを盛りつけ', 'ネギと大根おろし','ポン酢'] },
-        { "difficulty": "single_star", "name": "無限ピーマン", "type": "multiple_choice", "answer": 'ごま油 + 塩 + 塩昆布 + 白ごま' },
-        { "difficulty": "single_star", "name": "漬物盛合せ", "type": "multiple_choice", "answer": 'たくあん30g + かっぱ30g + しば漬け30g' },
-        { "difficulty": "single_star", "name": "長芋わさび", "type": "multiple_choice", "answer": '器に長いもを80g盛る + 刻みのりを乗せる' },
-        { "difficulty": "single_star", "name": "たたききゅうり", "type": "reordering", "steps": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマ'] },
-        { "difficulty": "single_star", "name": "とりのたたき", "type": "reordering", "steps": ['器にオニスラを盛る', '大葉を乗せる', 'たたきを並べる', '皿にネギ、しょうがを添える'] },
-        { "difficulty": "single_star", "name": "鶏わさび和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60Gとわさびと醤油混ぜて盛り付け','のり ひとつまみかける'] },
-        { "difficulty": "single_star", "name": "鶏梅肉和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60Gと梅肉を混ぜて盛り付ける','のり ひとつまみかける'] },
-        { "difficulty": "single_star", "name": "鶏ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', 'ユッケタレをかける','生うずら','ネギと白ごまをかける'] },
-        { "difficulty": "single_star", "name": "出汁巻きたまご", "type": "multiple_choice", "answer": '600W 4分 皿の笹葉の上に盛り付けて おろし大根 〆' },
-        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースにささみ４個、５個 胡麻ドレッシング〆' },
-        { "difficulty": "single_star", "name": "チョレギサラダ", "type": "multiple_choice", "answer": 'サラダベースに白ネギ チョレギドレッシング のり 〆' },
-        { "difficulty": "single_star", "name": "豆腐と塩昆布のサラダ", "type": "multiple_choice", "answer": 'サラダベースに4等分の豆腐と塩昆布と 和風ドレッシング かつお節 〆' },
-        { "difficulty": "single_star", "name": "温玉シーザーサラダ", "type": "multiple_choice", "answer": 'サラダベースに中心にくぼみをつくり温玉１個、粉チーズかけて シーザードレッシング〆' },
+        // --- 刺し場 ---
+        { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる', "img_url": "" },
+        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'], "img_url": "" },
+        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(30g)を盛り付け', "img_url": "" },
+        { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '半分にした大葉 梅クラゲ(30g)を盛り付け', "img_url": "" },
+        { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '半分にした大葉 チャンジャ(30g)を盛り付け、ネギ〆', "img_url": "" },
+        { "difficulty": "single_star", "name": "かわぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'とりかわ盛りつけ', 'ネギ、大根おろし','ポン酢'], "img_url": "" },
+        { "difficulty": "single_star", "name": "えのきぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'えのき盛りつけ', 'ネギ、大根おろし','ポン酢'], "img_url": "" },
+        { "difficulty": "single_star", "name": "無限ピーマン", "type": "multiple_choice", "answer": 'ごま油、塩、塩昆布、白ごま', "img_url": "" },
+        { "difficulty": "single_star", "name": "漬物盛合せ", "type": "multiple_choice", "answer": 'たくあん30g、かっぱ30g、しば漬け30g', "img_url": "" },
+        { "difficulty": "single_star", "name": "長芋わさび", "type": "multiple_choice", "answer": '器に長いもを80g盛り、刻みのり〆', "img_url": "" },
+        { "difficulty": "single_star", "name": "たたききゅうり", "type": "reordering", "steps": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマ〆'], "img_url": "" },
+        { "difficulty": "single_star", "name": "とりのたたき", "type": "reordering", "steps": ['器にオニスラを盛る','大葉を乗せる','たたき4枚', '小皿にネギ、しょうが'], "img_url": "" },
+        { "difficulty": "single_star", "name": "鶏わさび和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60Gわさびと醤油混ぜて盛り付け','のり'], "img_url": "" },
+        { "difficulty": "single_star", "name": "鶏梅肉和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60G梅肉を混ぜて盛り付ける','のり'], "img_url": "" },
+        { "difficulty": "single_star", "name": "鶏ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', 'ユッケタレをかける','生うずら','ネギと白ごま'], "img_url": "" },
+        { "difficulty": "single_star", "name": "鶏塩ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', '塩だれをかける','生うずら','ネギと白ごま'], "img_url": "" },
+        { "difficulty": "single_star", "name": "出汁巻きたまご", "type": "multiple_choice", "answer": '600W 4分 笹葉の上に盛り付けて おろし大根 〆', "img_url": "" },
+        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースにささみ４個 胡麻ドレッシング〆', "img_url": "" },
+        { "difficulty": "single_star", "name": "豆腐と塩昆布のサラダ", "type": "multiple_choice", "answer": 'サラダベースに4等分の豆腐と塩昆布 和風ドレッシング、かつお節〆', "img_url": "" },
+        { "difficulty": "single_star", "name": "温玉シーザーサラダ", "type": "multiple_choice", "answer": 'サラダベースに温玉１個、クルトン、粉チーズかけて シーザードレッシング〆', "img_url": "" },
 
-        // --- 揚げ場 (double_star) ---
-        { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる + 天紙 + 塩 + ケチャップ" },
-        { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる + バター + ハチミツ + パセリ' },
-        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる + 塩 + 天紙 + パセリ' },
-        { "difficulty": "double_star", "name": "名古屋風手羽先唐揚げ", "type": "multiple_choice", "answer": '片栗粉 5分間揚げる + キャベツ + 手羽タレ + コショウ + 白ごま' },
-        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉 + 2分間揚げる + 天紙 + レモン" },
-        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "小麦粉+唐揚げ粉 + 2分間揚げる + 天紙 + レモン" },
-        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる + 天紙 + ネギ、しょうが" },
-        { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉 + 5分間揚げる + サラダ + レモン + マヨネーズ" },
-        { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "5分間揚げる + サラダ + レモン + タルタル + 南蛮酢 + パセリ" },
+        // --- 揚げ場 ---
+        { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる 塩ふりかけ、ケチャップ", "img_url": "" },
+        { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる バター ハチミツとパセリ', "img_url": "" },
+        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ パセリ', "img_url": "" },
+        { "difficulty": "double_star", "name": "名古屋風手羽先唐揚げ", "type": "multiple_choice", "answer": '片栗粉5分間揚げる キャベツの上に盛り付けて手羽タレ、コショウ、白ごま', "img_url": "" },
+        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉2分間揚げる レモン", "img_url": "" },
+        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "小麦粉+唐揚げ粉2分間揚げる レモン", "img_url": "" },
+        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる 天紙の上に６等分してネギ、しょうが", "img_url": "" },
+        { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉5分間揚げる サラダの上に盛り付け レモン、マヨネーズ", "img_url": "" },
+        { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "5分間揚げる 4等分にしてサラダの上に盛り付け、タルタル 南蛮酢 レモン、パセリ", "img_url": "" },
 
-        // --- 焼き場 (triple_star) --- ※クイズ形式
-        { 
-            "difficulty": "triple_star", 
-            "name": "レタス巻き", 
-            "answer": '塩コショウ',
-            "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "ヤンコン巻き", 
-            "answer": '塩コショウ',
-            "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "えのき巻き", 
-            "answer": 'ポン酢',
-            "dummies": ['塩コショウ', 'タレ','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "うずら巻き", 
-            "answer": 'タレ',
-            "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "里芋巻き", 
-            "answer": '塩コショウ',
-            "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "大葉巻き", 
-            "answer": '梅肉',
-            "dummies": ['塩コショウ', 'タレ', 'ポン酢','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "アスパラ巻き", 
-            "answer": '塩コショウ',
-            "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "トマトチーズ巻き", 
-            "answer": 'バジル',
-            "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "なすチーズ巻き", 
-            "answer": 'タレ',
-            "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "白ネギ巻き", 
-            "answer": 'タレ',
-            "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "にんにくの芽巻き", 
-            "answer": '焼き肉のタレ',
-            "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "モッツァレラチーズ巻き", 
-            "answer": 'タレ',
-            "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ']
-        },
-        { 
-            "difficulty": "triple_star", 
-            "name": "長芋明太マヨ巻き", 
-            "answer": '明太マヨ',
-            "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル']
-        }
+        // --- 焼き場 ---
+        { "difficulty": "triple_star", "name": "レタス巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "ヤンコン巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "えのき巻き", "answer": 'ポン酢', "dummies": ['塩コショウ', 'タレ','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "うずら巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "里芋巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "大葉巻き", "answer": '梅肉', "dummies": ['塩コショウ', 'タレ', 'ポン酢','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "アスパラ巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "トマトチーズ巻き", "answer": 'バジル', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "なすチーズ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "白ネギ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "えびの肉巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "モッツァレラチーズ巻き", "answer": '塩コショウ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
+        { "difficulty": "triple_star", "name": "長芋明太マヨ巻き", "answer": '明太マヨ', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル'], "img_url": "" }
     ];
 
     let currentDifficulty = '';
+    let currentScreen = 'difficulty-select';
 
-    const difficultySelectEl = document.getElementById('difficulty-select');
-    const menuListScreenEl = document.getElementById('menu-list-screen');
-    const procedureScreenEl = document.getElementById('procedure-screen');
-    const quizScreenEl = document.getElementById('quiz-screen');
-    const menuListHeadingEl = document.getElementById('menu-list-heading');
-    const menuOptionsAreaEl = document.getElementById('menu-options-area');
-    const procedureNameEl = document.getElementById('procedure-name');
-    const procedureContentAreaEl = document.getElementById('procedure-content-area');
-    
+    const globalBackBtn = document.getElementById('global-back-btn');
+    const screens = {
+        'difficulty-select': document.getElementById('difficulty-select'),
+        'menu-list-screen': document.getElementById('menu-list-screen'),
+        'procedure-screen': document.getElementById('procedure-screen'),
+        'quiz-screen': document.getElementById('quiz-screen')
+    };
+
     function showScreen(screenId) {
-        [difficultySelectEl, menuListScreenEl, procedureScreenEl, quizScreenEl].forEach(el => {
-            el.classList.add('hidden');
-        });
-        document.getElementById(screenId).classList.remove('hidden');
+        currentScreen = screenId;
+        Object.keys(screens).forEach(key => screens[key].classList.toggle('hidden', key !== screenId));
+        globalBackBtn.classList.toggle('hidden', screenId === 'difficulty-select');
+        document.getElementById('app-title').classList.toggle('hidden', screenId !== 'difficulty-select');
     }
 
-    function setupEventListeners() {
-        document.getElementById('single-star-btn').onclick = () => { currentDifficulty = 'single_star'; renderMenuList(); };
-        document.getElementById('double-star-btn').onclick = () => { currentDifficulty = 'double_star'; renderMenuList(); };
-        document.getElementById('triple-star-btn').onclick = () => { currentDifficulty = 'triple_star'; renderMenuList(); };
-        
-        document.getElementById('back-to-difficulty-btn').onclick = () => {
-             currentDifficulty = '';
-             showScreen('difficulty-select');
-        };
-
-        document.getElementById('back-to-menu-list-btn').onclick = () => renderMenuList();
-        document.getElementById('next-from-quiz-btn').onclick = () => renderMenuList();
+    function handleBack() {
+        if (currentScreen === 'procedure-screen' || currentScreen === 'quiz-screen') renderMenuList();
+        else if (currentScreen === 'menu-list-screen') showScreen('difficulty-select');
     }
+
+    globalBackBtn.onclick = handleBack;
+    document.getElementById('back-to-menu-list-btn').onclick = handleBack;
+    document.getElementById('next-from-quiz-btn').onclick = handleBack;
+
+    document.getElementById('single-star-btn').onclick = () => { currentDifficulty = 'single_star'; renderMenuList(); };
+    document.getElementById('double-star-btn').onclick = () => { currentDifficulty = 'double_star'; renderMenuList(); };
+    document.getElementById('triple-star-btn').onclick = () => { currentDifficulty = 'triple_star'; renderMenuList(); };
 
     function renderMenuList() {
-        menuOptionsAreaEl.innerHTML = '';
-        const filteredQuizzes = quizzes.filter(q => q.difficulty === currentDifficulty);
+        const area = document.getElementById('menu-options-area');
+        area.innerHTML = '';
+        const filtered = quizzes.filter(q => q.difficulty === currentDifficulty);
         const names = { 'single_star': '刺し場', 'double_star': '揚げ場', 'triple_star': '焼き場' };
-        menuListHeadingEl.textContent = `${names[currentDifficulty]}のメニュー`;
+        document.getElementById('menu-list-heading').textContent = `${names[currentDifficulty]}メニュー`;
 
-        filteredQuizzes.forEach(quiz => {
-            const button = document.createElement('button');
-            button.textContent = quiz.name;
-            button.className = 'btn-base menu-item-btn';
-            button.onclick = () => showDetail(quiz);
-            menuOptionsAreaEl.appendChild(button);
+        filtered.forEach(quiz => {
+            const btn = document.createElement('button');
+            btn.textContent = quiz.name;
+            btn.className = 'btn-base menu-item-btn';
+            btn.onclick = () => (quiz.difficulty === 'triple_star' ? startQuiz(quiz) : showProcedure(quiz));
+            area.appendChild(btn);
         });
         showScreen('menu-list-screen');
     }
 
-    function showDetail(quiz) {
-        if (quiz.difficulty === 'triple_star') {
-            startQuiz(quiz);
-        } else {
-            showProcedure(quiz);
-        }
-    }
-
     function showProcedure(quiz) {
-        procedureNameEl.textContent = quiz.name;
-        procedureContentAreaEl.innerHTML = '';
+        document.getElementById('procedure-name').textContent = quiz.name;
+        const contentArea = document.getElementById('procedure-content-area');
+        const imgArea = document.getElementById('image-area');
+        const imgTag = document.getElementById('procedure-img');
+        contentArea.innerHTML = '';
+
+        if (quiz.img_url) { imgTag.src = quiz.img_url; imgArea.classList.remove('hidden'); }
+        else { imgArea.classList.add('hidden'); }
 
         if (quiz.type === 'multiple_choice') {
-            const answer = document.createElement('p');
-            answer.className = 'text-xl p-4 bg-green-50 text-green-700 font-bold rounded-lg border-2 border-green-300';
-            answer.textContent = quiz.answer;
-            procedureContentAreaEl.appendChild(answer);
-        } else if (quiz.type === 'reordering') {
+            contentArea.innerHTML = `<p class="text-xl p-4 bg-green-50 text-green-700 font-bold rounded-lg border-2 border-green-300">${quiz.answer}</p>`;
+        } else {
             const ol = document.createElement('ol');
             ol.className = 'step-list';
-            quiz.steps.forEach((step, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<strong>${index + 1}.</strong> ${step}`;
-                ol.appendChild(li);
-            });
-            procedureContentAreaEl.appendChild(ol);
+            quiz.steps.forEach((step, i) => { ol.innerHTML += `<li><strong>${i + 1}.</strong> ${step}</li>`; });
+            contentArea.appendChild(ol);
         }
         showScreen('procedure-screen');
     }
@@ -333,41 +198,28 @@
         const area = document.getElementById('quiz-choices-area');
         const feedback = document.getElementById('quiz-feedback');
         const nextBtn = document.getElementById('next-from-quiz-btn');
-        area.innerHTML = '';
-        feedback.classList.add('hidden');
-        nextBtn.classList.add('hidden');
+        area.innerHTML = ''; feedback.classList.add('hidden'); nextBtn.classList.add('hidden');
 
         const choices = [quiz.answer, ...quiz.dummies].sort(() => Math.random() - 0.5);
-
         choices.forEach(choice => {
             const btn = document.createElement('button');
             btn.className = 'quiz-choice-btn';
             btn.textContent = choice;
             btn.onclick = () => {
-                if (choice === quiz.answer) {
-                    btn.classList.add('correct');
-                    feedback.textContent = "正解";
-                    feedback.className = "mt-4 text-center font-bold text-lg text-green-600";
-                    feedback.classList.remove('hidden');
+                const isCorrect = choice === quiz.answer;
+                btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                feedback.innerHTML = isCorrect ? "正解！" : `<br><span class="text-sm font-normal text-gray-500">正解は: ${quiz.answer}</span>`;
+                feedback.className = `mt-4 text-center font-bold text-lg ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+                feedback.classList.remove('hidden');
+                if (isCorrect) {
                     nextBtn.classList.remove('hidden');
                     Array.from(area.children).forEach(b => b.disabled = true);
-                } else {
-                    btn.classList.add('incorrect');
-                    feedback.textContent = "不正解";
-                    feedback.className = "mt-4 text-center font-bold text-lg text-red-600";
-                    feedback.classList.remove('hidden');
                 }
             };
             area.appendChild(btn);
         });
         showScreen('quiz-screen');
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setupEventListeners();
-        showScreen('difficulty-select');
-    });
 </script>
-
 </body>
 </html>
