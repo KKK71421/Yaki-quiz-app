@@ -5,192 +5,267 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>キッチン手順 確認アプリ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1f2937; }
-        .container {
-            max-width: 600px; margin: 1rem auto; padding: 1.5rem;
-            background-color: #ffffff; border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            text-align: center; position: relative;
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f0f2f5; color: #1f2937; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        
+        /* カテゴリー別のアクセントカラー */
+        .theme-single_star { border-top: 8px solid #3b82f6; } 
+        .theme-double_star { border-top: 8px solid #f97316; } 
+        .theme-triple_star { border-top: 8px solid #ef4444; }
+        .theme-portion { border-top: 8px solid #10b981; } 
+        
+        .step-bubble {
+            background: #f8fafc;
+            border-left: 6px solid #3b82f6;
+            transition: transform 0.1s;
         }
-        .header-back-btn {
-            position: absolute; top: 1.25rem; left: 1.25rem;
-            display: flex; align-items: center; justify-content: center;
-            width: 2.5rem; height: 2.5rem; background-color: #f3f4f6;
-            border-radius: 50%; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-base { padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 9999px; transition: 0.2s; border: 2px solid transparent; }
-        .btn-primary { background-color: #3b82f6; color: #ffffff; }
-        .btn-secondary { background-color: #e5e7eb; color: #1f2937; }
-        .menu-item-btn { width: 100%; text-align: left; background-color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
-        .quiz-choice-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 0.5rem; border: 2px solid #e5e7eb; margin-bottom: 0.5rem; font-weight: 600; }
-        .correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46; }
-        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b; }
-        .step-list { text-align: left; list-style: none; padding: 0; margin-top: 1rem; }
-        .step-list li { background-color: #eff6ff; padding: 1rem; margin-bottom: 0.75rem; border-radius: 0.5rem; font-weight: 600; border-left: 5px solid #3b82f6; }
-        .image-container { width: 100%; margin: 1rem 0; border-radius: 0.5rem; overflow: hidden; background-color: #f9fafb; border: 1px solid #e5e7eb; }
-        .image-container img { width: 100%; height: auto; display: block; }
+        .step-bubble:active { transform: scale(0.98); }
+
+        .portion-row { border-bottom: 1px inset #f1f5f9; padding: 12px 0; }
+        .portion-row:last-child { border-bottom: none; }
     </style>
 </head>
-<body class="bg-gray-100 flex items-start justify-center min-h-screen">
+<body class="p-4 pb-12">
 
-<div id="app" class="container">
-    <div id="global-back-btn" class="header-back-btn hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
+<div id="app" class="max-w-md mx-auto">
+    
+    <header class="flex items-center justify-between mb-6">
+        <button id="global-back-btn" class="hidden p-2 bg-white rounded-full shadow text-gray-600 active:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <h1 id="app-title" class="text-2xl font-black text-gray-800 mx-auto">キッチンメモ</h1>
+    </header>
+
+    <div id="difficulty-select" class="grid gap-3">
+        <button onclick="selectCategory('single_star')" class="p-5 card border-b-4 border-blue-500 text-xl font-bold text-blue-700 flex justify-between items-center">
+            🐟 刺し場 <span class="text-xs bg-blue-100 px-2 py-1 rounded">手順</span>
+        </button>
+        <button onclick="selectCategory('double_star')" class="p-5 card border-b-4 border-orange-500 text-xl font-bold text-orange-700 flex justify-between items-center">
+            🍟 揚げ場 <span class="text-xs bg-orange-100 px-2 py-1 rounded">手順</span>
+        </button>
+        <button onclick="selectCategory('triple_star')" class="p-5 card border-b-4 border-red-500 text-xl font-bold text-red-700 flex justify-between items-center">
+            🔥 焼き場 <span class="text-xs bg-red-100 px-2 py-1 rounded">クイズ</span>
+        </button>
+        <button onclick="selectCategory('portion')" class="p-5 card border-b-4 border-green-500 text-xl font-bold text-green-700 flex justify-between items-center">
+            ⚖️ ポーション <span class="text-xs bg-green-100 px-2 py-1 rounded">仕込み量</span>
+        </button>
     </div>
 
-    <h1 id="app-title" class="text-3xl font-bold mb-8 text-blue-600">キッチンメモ</h1>
+    <div id="menu-list-screen" class="hidden">
+        <h2 id="menu-list-heading" class="text-xl font-bold mb-4 px-2 text-gray-700"></h2>
+        <div id="menu-options-area" class="grid gap-2"></div>
+    </div>
 
-    <div id="difficulty-select" class="space-y-4">
-        <div class="flex flex-col space-y-4 max-w-sm mx-auto">
-            <button id="single-star-btn" class="btn-base btn-primary">刺し場</button>
-            <button id="double-star-btn" class="btn-base btn-primary">揚げ場</button>
-            <button id="triple-star-btn" class="btn-base btn-primary">焼き場</button>
+    <div id="procedure-screen" class="hidden">
+        <div class="card p-5 theme-default border-t-8" id="procedure-card">
+            <h3 id="procedure-name" class="text-2xl font-black mb-4 border-b pb-2 text-center"></h3>
+            <div id="procedure-content-area" class="space-y-3"></div>
+            <button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">リストに戻る</button>
         </div>
     </div>
 
-    <div id="menu-list-screen" class="hidden text-left">
-        <h2 id="menu-list-heading" class="text-2xl font-semibold mb-6 text-center text-blue-500"></h2>
-        <div id="menu-options-area" class="space-y-2"></div>
+    <div id="quiz-screen" class="hidden">
+        <div class="card p-5 border-t-8 border-red-500">
+            <div class="text-center mb-4">
+                <span class="text-sm font-bold text-red-500 uppercase tracking-widest">味付けクイズ</span>
+                <h3 id="quiz-item-name" class="text-3xl font-black"></h3>
+            </div>
+            <div id="quiz-choices-area" class="grid gap-3"></div>
+            <div id="quiz-feedback" class="mt-4 p-4 rounded-lg text-center font-bold hidden"></div>
+            <button id="next-from-quiz-btn" onclick="handleBack()" class="mt-6 w-full py-4 bg-red-500 text-white rounded-xl font-bold hidden">完了して次へ</button>
+        </div>
     </div>
 
-    <div id="procedure-screen" class="hidden text-left">
-        <h3 id="procedure-name" class="text-2xl font-bold mb-4 text-center"></h3>
-        <div id="image-area" class="image-container hidden"><img id="procedure-img" src="" alt="見本"></div>
-        <div id="procedure-content-area"></div>
-        <button id="back-to-menu-list-btn" class="mt-8 btn-base btn-primary w-full">リストに戻る</button>
+    <div id="portion-screen" class="hidden">
+        <div class="card p-5 theme-portion border-t-8">
+            <h3 id="portion-title" class="text-2xl font-black mb-4 border-b pb-2 text-center text-green-700"></h3>
+            <div id="portion-list-area" class="space-y-1"></div>
+            <button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">リストに戻る</button>
+        </div>
     </div>
 
-    <div id="quiz-screen" class="hidden text-left">
-        <h3 id="quiz-item-name" class="text-2xl font-bold mb-2 text-center text-orange-600"></h3>
-        <p class="text-center text-gray-500 mb-6 font-semibold">正しい味付け・仕上げを選んでください</p>
-        <div id="quiz-choices-area" class="space-y-3"></div>
-        <div id="quiz-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
-        <button id="next-from-quiz-btn" class="mt-8 btn-base btn-primary w-full hidden">完了</button>
-    </div>
 </div>
 
 <script>
     const quizzes = [
-        // --- 刺し場 ---
-        { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる', "img_url": "" },
-        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'], "img_url": "" },
-        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(30g)を盛り付け', "img_url": "" },
-        { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '半分にした大葉 梅クラゲ(30g)を盛り付け', "img_url": "" },
-        { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '半分にした大葉 チャンジャ(30g)を盛り付け、ネギ〆', "img_url": "" },
-        { "difficulty": "single_star", "name": "かわぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'とりかわ盛りつけ', 'ネギ、大根おろし','ポン酢'], "img_url": "" },
-        { "difficulty": "single_star", "name": "えのきぽん", "type": "reordering", "steps": ['500W１分えのき盛りつけ', 'ネギ、大根おろし','ポン酢'], "img_url": "" },
-        { "difficulty": "single_star", "name": "無限ピーマン", "type": "multiple_choice", "answer": 'ごま油、塩、塩昆布、白ごま', "img_url": "" },
-        { "difficulty": "single_star", "name": "漬物盛合せ", "type": "multiple_choice", "answer": 'たくあん30g、かっぱ30g、しば漬け30g', "img_url": "" },
-        { "difficulty": "single_star", "name": "長芋わさび", "type": "multiple_choice", "answer": '器に長いもを80g盛り、刻みのり〆', "img_url": "" },
-        { "difficulty": "single_star", "name": "たたききゅうり", "type": "reordering", "steps": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマ〆'], "img_url": "" },
-        { "difficulty": "single_star", "name": "とりのたたき", "type": "reordering", "steps": ['器にオニスラを盛る','大葉を乗せる','たたき4枚', '小皿にネギ、しょうが'], "img_url": "" },
-        { "difficulty": "single_star", "name": "鶏わさび和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60Gわさびと醤油混ぜて盛り付け','のり'], "img_url": "" },
-        { "difficulty": "single_star", "name": "鶏梅肉和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60G梅肉を混ぜて盛り付ける','のり'], "img_url": "" },
-        { "difficulty": "single_star", "name": "鶏ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', 'ユッケタレをかける','生うずら','ネギと白ごま'], "img_url": "" },
-        { "difficulty": "single_star", "name": "鶏塩ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', '塩だれをかける','生うずら','ネギと白ごま'], "img_url": "" },
-        { "difficulty": "single_star", "name": "出汁巻きたまご", "type": "multiple_choice", "answer": '600W 4分 笹葉の上に盛り付けて おろし大根 〆', "img_url": "" },
-        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースにささみ４個 胡麻ドレッシング〆', "img_url": "" },
-        { "difficulty": "single_star", "name": "豆腐と塩昆布のサラダ", "type": "multiple_choice", "answer": 'サラダベースに4等分の豆腐と塩昆布 和風ドレッシング、かつお節〆', "img_url": "" },
-        { "difficulty": "single_star", "name": "温玉シーザーサラダ", "type": "multiple_choice", "answer": 'サラダベースに温玉１個、クルトン、粉チーズかけて シーザードレッシング〆', "img_url": "" },
+        // --- 刺し場 手順 ---
+        { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる' },
+        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'] },
+        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(30g)を盛り付け' },
+        { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '半分にした大葉 梅クラゲ(30g)を盛り付け' },
+        { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '半分にした大葉 チャンジャ(30g)を盛り付け、ネギ〆' },
+        { "difficulty": "single_star", "name": "かわぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'とりかわ盛りつけ', 'ネギ、大根おろし','ポン酢'] },
+        { "difficulty": "single_star", "name": "えのきぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'えのき盛りつけ', 'ネギ、大根おろし','ポン酢'] },
+        { "difficulty": "single_star", "name": "無限ピーマン", "type": "multiple_choice", "answer": 'ごま油、塩、塩昆布、白ごま' },
+        { "difficulty": "single_star", "name": "漬物盛合せ", "type": "multiple_choice", "answer": 'たくあん30g、かっぱ30g、しば漬け30g' },
+        { "difficulty": "single_star", "name": "長芋わさび", "type": "multiple_choice", "answer": '器に長いもを80g盛り、刻みのり〆' },
+        { "difficulty": "single_star", "name": "たたききゅうり", "type": "reordering", "steps": ['皿にたたききゅうりを盛る', 'しおだれをかける', 'ゴマ〆'] },
+        { "difficulty": "single_star", "name": "とりのたたき", "type": "reordering", "steps": ['器にオニスラを盛る','大葉を乗せる','たたき4枚', '小皿にネギ、しょうが'] },
+        { "difficulty": "single_star", "name": "鶏わさび和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60Gわさびと醤油混ぜて盛り付け','のり'] },
+        { "difficulty": "single_star", "name": "鶏梅肉和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60G梅肉を混ぜて盛り付ける','のり'] },
+        { "difficulty": "single_star", "name": "鶏ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', 'ユッケタレをかける','生うずら','ネギと白ごま'] },
+        { "difficulty": "single_star", "name": "鶏塩ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', '塩だれをかける','生うずら','ネギと白ごま'] },
+        { "difficulty": "single_star", "name": "出汁巻きたまご", "type": "multiple_choice", "answer": '600W 4分 笹葉の上に盛り付けて おろし大根 〆' },
+        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースにささみ４個 胡麻ドレッシング〆' },
+        { "difficulty": "single_star", "name": "豆腐と塩昆布のサラダ", "type": "multiple_choice", "answer": 'サラダベースに4等分の豆腐と塩昆布 和風ドレッシング、かつお節〆' },
+        { "difficulty": "single_star", "name": "温玉シーザーサラダ", "type": "multiple_choice", "answer": 'サラダベースに温玉１個、クルトン、粉チーズかけて シーザードレッシング〆' },
 
-        // --- 揚げ場 ---
-        { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる 塩ふりかけ、ケチャップ", "img_url": "" },
-        { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる バター ハチミツとパセリ', "img_url": "" },
-        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ パセリ', "img_url": "" },
-        { "difficulty": "double_star", "name": "名古屋風手羽先唐揚げ", "type": "multiple_choice", "answer": '片栗粉5分間揚げる キャベツの上に盛り付けて手羽タレ、コショウ、白ごま', "img_url": "" },
-        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉2分間揚げる レモン", "img_url": "" },
-        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "小麦粉+唐揚げ粉2分間揚げる レモン", "img_url": "" },
-        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる 天紙の上に６等分してネギ、しょうが", "img_url": "" },
-        { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉5分間揚げる サラダの上に盛り付け レモン、マヨネーズ", "img_url": "" },
-        { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "5分間揚げる 4等分にしてサラダの上に盛り付け、タルタル 南蛮酢 レモン、パセリ", "img_url": "" },
+        // --- 揚げ場 手順 ---
+        { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる 塩ふりかけ、ケチャップ" },
+        { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる バター ハチミツとパセリ' },
+        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ パセリ' },
+        { "difficulty": "double_star", "name": "名古屋風手羽先唐揚げ", "type": "multiple_choice", "answer": '片栗粉5分間揚げる キャベツの上に盛り付けて手羽タレ、コショウ、白ごま' },
+        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉2分間揚げる レモン" },
+        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "片栗粉+唐揚げ粉2分間揚げる レモン" },
+        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる 天紙の上に６等分してネギ、しょうが" },
+        { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉5分間揚げる サラダの上に盛り付け レモン、マヨネーズ" },
+        { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "5分間揚げる 4等分にしてサラダの上に盛り付け、タルタル 南蛮酢 レモン、パセリ" },
 
-        // --- 焼き場 ---
-        { "difficulty": "triple_star", "name": "レタス巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "ヤンコン巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "えのき巻き", "answer": 'ポン酢', "dummies": ['塩コショウ', 'タレ','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "うずら巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "里芋巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "大葉巻き", "answer": '梅肉', "dummies": ['塩コショウ', 'タレ', 'ポン酢','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "アスパラ巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "トマトチーズ巻き", "answer": 'バジル', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "なすチーズ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "白ネギ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "えびの肉巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "モッツァレラチーズ巻き", "answer": '塩コショウ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'], "img_url": "" },
-        { "difficulty": "triple_star", "name": "長芋明太マヨ巻き", "answer": '明太マヨ', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル'], "img_url": "" }
+        // --- 焼き場 クイズ ---
+        { "difficulty": "triple_star", "name": "レタス巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "ヤンコン巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "えのき巻き", "answer": 'ポン酢', "dummies": ['塩コショウ', 'タレ','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "うずら巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "里芋巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "大葉巻き", "answer": '梅肉', "dummies": ['塩コショウ', 'タレ', 'ポン酢','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "アスパラ巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "トマトチーズ巻き", "answer": 'バジル', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "なすチーズ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "白ネギ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "えびの肉巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "モッツァレラチーズ巻き", "answer": '塩コショウ', "dummies": ['塩コショウ','ポン酢','梅肉','焼き肉のタレ','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "長芋明太マヨ巻き", "answer": '明太マヨ', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','焼き肉のタレ','バジル'] },
+
+        // --- ポーションデータ (追加分) ---
+        { "difficulty": "portion", "name": "刺し場・野菜", "data": [
+            { "item": "ピーマン", "amount": "40", "unit": "g" },
+            { "item": "きゅうり", "amount": "85-90", "unit": "g" },
+            { "item": "枝豆", "amount": "100", "unit": "g" },
+            { "item": "えのぽん", "amount": "60", "unit": "g" },
+            { "item": "蒸し鶏", "amount": "50", "unit": "g" }
+        ]},
+        { "difficulty": "portion", "name": "揚げ場・一品", "data": [
+            { "item": "ポテトフライ", "amount": "150", "unit": "g" },
+            { "item": "手羽先", "amount": "3", "unit": "個" },
+            { "item": "とうもろこし", "amount": "3", "unit": "個" },
+            { "item": "軟骨唐揚げ", "amount": "100", "unit": "g" },
+            { "item": "かわぱり", "amount": "100", "unit": "g" },
+            { "item": "里芋", "amount": "8", "unit": "個" },
+            { "item": "ウインナー", "amount": "6", "unit": "個" }
+        ]},
+        { "difficulty": "portion", "name": "焼き場・肉", "data": [
+            { "item": "エイヒレ", "amount": "30", "unit": "g" },
+            { "item": "焼きおにぎり", "amount": "160", "unit": "g" },
+            { "item": "サザエ", "amount": "2", "unit": "個" },
+            { "item": "ホタテ", "amount": "1", "unit": "個" },
+            { "item": "ホルモン", "amount": "150", "unit": "g" },
+            { "item": "つくね", "amount": "50", "unit": "g" }
+        ]},
+        { "difficulty": "portion", "name": "釜飯・雑炊・調味料", "data": [
+            { "item": "浸水米", "amount": "200", "unit": "g" },
+            { "item": "雑炊・釜飯 鶏肉", "amount": "50", "unit": "g" },
+            { "item": "釜野菜(あげ・ゴボウ)", "amount": "各10", "unit": "g" },
+            { "item": "雑炊エノキ", "amount": "15", "unit": "g" },
+            { "item": "赤味噌", "amount": "90", "unit": "g" },
+            { "item": "白味噌(ニンニク5gバター2個)", "amount": "90g", "unit": "g" },
+            { "item": "凍結果実", "amount": "40", "unit": "g" }
+        ]}
     ];
 
     let currentDifficulty = '';
-    let currentScreen = 'difficulty-select';
-
-    const globalBackBtn = document.getElementById('global-back-btn');
-    const screens = {
-        'difficulty-select': document.getElementById('difficulty-select'),
-        'menu-list-screen': document.getElementById('menu-list-screen'),
-        'procedure-screen': document.getElementById('procedure-screen'),
-        'quiz-screen': document.getElementById('quiz-screen')
-    };
 
     function showScreen(screenId) {
-        currentScreen = screenId;
-        Object.keys(screens).forEach(key => screens[key].classList.toggle('hidden', key !== screenId));
-        globalBackBtn.classList.toggle('hidden', screenId === 'difficulty-select');
-        document.getElementById('app-title').classList.toggle('hidden', screenId !== 'difficulty-select');
+        ['difficulty-select', 'menu-list-screen', 'procedure-screen', 'quiz-screen', 'portion-screen'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('hidden', id !== screenId);
+        });
+        document.getElementById('global-back-btn').classList.toggle('hidden', screenId === 'difficulty-select');
+    }
+
+    function selectCategory(diff) {
+        currentDifficulty = diff;
+        renderMenuList();
     }
 
     function handleBack() {
-        if (currentScreen === 'procedure-screen' || currentScreen === 'quiz-screen') renderMenuList();
-        else if (currentScreen === 'menu-list-screen') showScreen('difficulty-select');
+        const current = getCurrentScreen();
+        if (['procedure-screen', 'quiz-screen', 'portion-screen'].includes(current)) {
+            renderMenuList();
+        } else {
+            showScreen('difficulty-select');
+        }
     }
 
-    globalBackBtn.onclick = handleBack;
-    document.getElementById('back-to-menu-list-btn').onclick = handleBack;
-    document.getElementById('next-from-quiz-btn').onclick = handleBack;
-
-    document.getElementById('single-star-btn').onclick = () => { currentDifficulty = 'single_star'; renderMenuList(); };
-    document.getElementById('double-star-btn').onclick = () => { currentDifficulty = 'double_star'; renderMenuList(); };
-    document.getElementById('triple-star-btn').onclick = () => { currentDifficulty = 'triple_star'; renderMenuList(); };
+    function getCurrentScreen() {
+        if (!document.getElementById('portion-screen').classList.contains('hidden')) return 'portion-screen';
+        if (!document.getElementById('procedure-screen').classList.contains('hidden')) return 'procedure-screen';
+        if (!document.getElementById('quiz-screen').classList.contains('hidden')) return 'quiz-screen';
+        if (!document.getElementById('menu-list-screen').classList.contains('hidden')) return 'menu-list-screen';
+        return 'difficulty-select';
+    }
 
     function renderMenuList() {
         const area = document.getElementById('menu-options-area');
         area.innerHTML = '';
         const filtered = quizzes.filter(q => q.difficulty === currentDifficulty);
-        const names = { 'single_star': '刺し場', 'double_star': '揚げ場', 'triple_star': '焼き場' };
-        document.getElementById('menu-list-heading').textContent = `${names[currentDifficulty]}メニュー`;
+        const names = { 'single_star': '刺し場', 'double_star': '揚げ場', 'triple_star': '焼き場', 'portion': 'ポーション' };
+        document.getElementById('menu-list-heading').textContent = `【${names[currentDifficulty]}】選択`;
 
         filtered.forEach(quiz => {
             const btn = document.createElement('button');
-            btn.textContent = quiz.name;
-            btn.className = 'btn-base menu-item-btn';
-            btn.onclick = () => (quiz.difficulty === 'triple_star' ? startQuiz(quiz) : showProcedure(quiz));
+            btn.className = 'w-full text-left p-4 card hover:bg-gray-50 flex justify-between items-center font-bold text-gray-700 active:bg-gray-100 transition-colors';
+            btn.innerHTML = `${quiz.name} <span class="text-gray-400 font-normal">▶︎</span>`;
+            
+            btn.onclick = () => {
+                if (currentDifficulty === 'portion') showPortion(quiz);
+                else if (currentDifficulty === 'triple_star') startQuiz(quiz);
+                else showProcedure(quiz);
+            };
             area.appendChild(btn);
         });
         showScreen('menu-list-screen');
     }
 
     function showProcedure(quiz) {
+        const card = document.getElementById('procedure-card');
+        card.className = `card p-5 theme-${quiz.difficulty} border-t-8`;
         document.getElementById('procedure-name').textContent = quiz.name;
         const contentArea = document.getElementById('procedure-content-area');
-        const imgArea = document.getElementById('image-area');
-        const imgTag = document.getElementById('procedure-img');
         contentArea.innerHTML = '';
 
-        if (quiz.img_url) { imgTag.src = quiz.img_url; imgArea.classList.remove('hidden'); }
-        else { imgArea.classList.add('hidden'); }
-
         if (quiz.type === 'multiple_choice') {
-            contentArea.innerHTML = `<p class="text-xl p-4 bg-green-50 text-green-700 font-bold rounded-lg border-2 border-green-300">${quiz.answer}</p>`;
+            contentArea.innerHTML = `<div class="p-6 bg-blue-50 text-blue-800 text-xl font-bold rounded-xl text-center shadow-inner border border-blue-200">${quiz.answer}</div>`;
         } else {
-            const ol = document.createElement('ol');
-            ol.className = 'step-list';
-            quiz.steps.forEach((step, i) => { ol.innerHTML += `<li><strong>${i + 1}.</strong> ${step}</li>`; });
-            contentArea.appendChild(ol);
+            quiz.steps.forEach((step, i) => {
+                contentArea.innerHTML += `<div class="step-bubble p-4 rounded-xl flex gap-3 items-center">
+                    <span class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">${i+1}</span>
+                    <span class="text-lg font-bold text-gray-800">${step}</span>
+                </div>`;
+            });
         }
         showScreen('procedure-screen');
+    }
+
+    function showPortion(quiz) {
+        document.getElementById('portion-title').textContent = quiz.name;
+        const area = document.getElementById('portion-list-area');
+        area.innerHTML = '';
+
+        quiz.data.forEach(d => {
+            area.innerHTML += `
+                <div class="portion-row flex justify-between items-center">
+                    <span class="text-lg font-bold text-gray-600">${d.item}</span>
+                    <div class="flex items-baseline">
+                        <span class="text-3xl font-black text-green-600">${d.amount}</span>
+                        <span class="text-sm font-bold text-gray-400 ml-1">${d.unit}</span>
+                    </div>
+                </div>`;
+        });
+        showScreen('portion-screen');
     }
 
     function startQuiz(quiz) {
@@ -203,24 +278,29 @@
         const choices = [quiz.answer, ...quiz.dummies].sort(() => Math.random() - 0.5);
         choices.forEach(choice => {
             const btn = document.createElement('button');
-            btn.className = 'quiz-choice-btn';
+            btn.className = 'w-full p-4 card border-2 border-gray-100 text-lg font-bold active:bg-gray-100 transition-all';
             btn.textContent = choice;
             btn.onclick = () => {
                 const isCorrect = choice === quiz.answer;
-                btn.classList.add(isCorrect ? 'correct' : 'incorrect');
-                feedback.innerHTML = isCorrect ? "正解！" : `<br><span class="text-sm font-normal text-gray-500">正解は: ${quiz.answer}</span>`;
-                feedback.className = `mt-4 text-center font-bold text-lg ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
-                feedback.classList.remove('hidden');
                 if (isCorrect) {
+                    btn.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                    feedback.textContent = "正解です！";
+                    feedback.className = "mt-4 p-4 rounded-lg text-center font-bold bg-green-100 text-green-700";
                     nextBtn.classList.remove('hidden');
                     Array.from(area.children).forEach(b => b.disabled = true);
+                } else {
+                    btn.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                    feedback.innerHTML = `違います！<br><span class="text-sm font-normal text-red-500">正解は【${quiz.answer}】</span>`;
+                    feedback.className = "mt-4 p-4 rounded-lg text-center font-bold bg-red-100 text-red-700";
                 }
+                feedback.classList.remove('hidden');
             };
             area.appendChild(btn);
         });
         showScreen('quiz-screen');
     }
+
+    document.getElementById('global-back-btn').onclick = handleBack;
 </script>
 </body>
 </html>
-
