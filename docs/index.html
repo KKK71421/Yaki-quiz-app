@@ -3,102 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>焼きんしゃい非公式</title>
+    <title>キッチン手順 確認アプリ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Noto Sans JP', sans-serif; background-color: #f0f2f5; color: #1f2937; }
         .card { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        
-        /* カテゴリー別のアクセントカラー */
         .theme-single_star { border-top: 8px solid #3b82f6; } 
         .theme-double_star { border-top: 8px solid #f97316; } 
         .theme-triple_star { border-top: 8px solid #ef4444; }
         .theme-portion { border-top: 8px solid #10b981; } 
-        
-        .step-bubble {
-            background: #f8fafc;
-            border-left: 6px solid #3b82f6;
-            transition: transform 0.1s;
-        }
+        .theme-shift { border-top: 8px solid #8b5cf6; }
+        .step-bubble { background: #f8fafc; border-left: 6px solid #3b82f6; transition: transform 0.1s; }
         .step-bubble:active { transform: scale(0.98); }
-
         .portion-row { border-bottom: 1px inset #f1f5f9; padding: 12px 0; }
         .portion-row:last-child { border-bottom: none; }
+        .shake { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
     </style>
 </head>
 <body class="p-4 pb-12">
 
 <div id="app" class="max-w-md mx-auto">
     
-    <header class="flex items-center justify-between mb-6">
-        <button id="global-back-btn" class="hidden p-2 bg-white rounded-full shadow text-gray-600 active:bg-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
-        <h1 id="app-title" class="text-2xl font-black text-gray-800 mx-auto">キッチンメモ</h1>
-    </header>
-
-    <div id="difficulty-select" class="grid gap-3">
-        <button onclick="selectCategory('single_star')" class="p-5 card border-b-4 border-blue-500 text-xl font-bold text-blue-700 flex justify-between items-center">
-            🐟 刺し場 <span class="text-xs bg-blue-100 px-2 py-1 rounded">手順</span>
-        </button>
-        <button onclick="selectCategory('double_star')" class="p-5 card border-b-4 border-orange-500 text-xl font-bold text-orange-700 flex justify-between items-center">
-            🍟 揚げ場 <span class="text-xs bg-orange-100 px-2 py-1 rounded">手順</span>
-        </button>
-        <button onclick="selectCategory('triple_star')" class="p-5 card border-b-4 border-red-500 text-xl font-bold text-red-700 flex justify-between items-center">
-            🔥 焼き場 <span class="text-xs bg-red-100 px-2 py-1 rounded">クイズ</span>
-        </button>
-        <button onclick="selectCategory('portion')" class="p-5 card border-b-4 border-green-500 text-xl font-bold text-green-700 flex justify-between items-center">
-            ⚖️ ポーション <span class="text-xs bg-green-100 px-2 py-1 rounded">仕込み量</span>
-        </button>
-    </div>
-
-    <div id="menu-list-screen" class="hidden">
-        <h2 id="menu-list-heading" class="text-xl font-bold mb-4 px-2 text-gray-700"></h2>
-        <div id="menu-options-area" class="grid gap-2"></div>
-    </div>
-
-    <div id="procedure-screen" class="hidden">
-        <div class="card p-5 theme-default border-t-8" id="procedure-card">
-            <h3 id="procedure-name" class="text-2xl font-black mb-4 border-b pb-2 text-center"></h3>
-            <div id="procedure-content-area" class="space-y-3"></div>
-            <button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">リストに戻る</button>
+    <div id="lock-screen" class="flex flex-col items-center justify-center min-h-[80vh]">
+        <div class="card p-8 w-full text-center">
+            <div class="mb-6 text-5xl text-blue-500">🔒</div>
+            <h2 class="text-xl font-bold mb-4">合言葉を入力してください</h2>
+            <input type="password" id="password-input" class="w-full p-4 border-2 border-gray-200 rounded-xl mb-4 text-center text-2xl" placeholder="****">
+            <button onclick="checkPassword()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg active:bg-blue-700">認証する</button>
+            <p id="error-msg" class="mt-4 text-red-500 font-bold hidden">合言葉が違います</p>
         </div>
     </div>
 
-    <div id="quiz-screen" class="hidden">
-        <div class="card p-5 border-t-8 border-red-500">
-            <div class="text-center mb-4">
-                <span class="text-sm font-bold text-red-500 uppercase tracking-widest">味付けクイズ</span>
-                <h3 id="quiz-item-name" class="text-3xl font-black"></h3>
+    <div id="main-content" class="hidden">
+        <header class="flex flex-col items-center mb-6">
+            <div class="flex items-center w-full relative">
+                <button id="global-back-btn" class="hidden absolute left-0 p-2 bg-white rounded-full shadow text-gray-600 active:bg-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-black text-gray-800 mx-auto">キッチンメモ</h1>
             </div>
-            <div id="quiz-choices-area" class="grid gap-3"></div>
-            <div id="quiz-feedback" class="mt-4 p-4 rounded-lg text-center font-bold hidden"></div>
-            <button id="next-from-quiz-btn" onclick="handleBack()" class="mt-6 w-full py-4 bg-red-500 text-white rounded-xl font-bold hidden">完了して次へ</button>
+            
+            <div id="top-update-banner" class="mt-2 px-4 py-1 bg-white rounded-full shadow-sm border border-gray-200">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Latest Update:</span>
+                <span id="update-time-display" class="text-xs font-black text-blue-600 ml-1">---</span>
+            </div>
+        </header>
+
+        <div id="difficulty-select" class="grid gap-3">
+            <button onclick="selectCategory('single_star')" class="p-5 card border-b-4 border-blue-500 text-xl font-bold text-blue-700 flex justify-between items-center">🐟 刺し場</button>
+            <button onclick="selectCategory('double_star')" class="p-5 card border-b-4 border-orange-500 text-xl font-bold text-orange-700 flex justify-between items-center">🍟 揚げ場</button>
+            <button onclick="selectCategory('triple_star')" class="p-5 card border-b-4 border-red-500 text-xl font-bold text-red-700 flex justify-between items-center">🔥 焼き場</button>
+            <button onclick="selectCategory('portion')" class="p-5 card border-b-4 border-green-500 text-xl font-bold text-green-700 flex justify-between items-center">⚖️ ポーション</button>
+            <button onclick="showShiftScreen()" class="p-5 card border-b-4 border-purple-500 text-xl font-bold text-purple-700 flex justify-between items-center">📅 シフト表</button>
+        </div>
+
+        <div id="menu-list-screen" class="hidden"><h2 id="menu-list-heading" class="text-xl font-bold mb-4 px-2 text-gray-700"></h2><div id="menu-options-area" class="grid gap-2"></div></div>
+        <div id="procedure-screen" class="hidden"><div class="card p-5 theme-default border-t-8" id="procedure-card"><h3 id="procedure-name" class="text-2xl font-black mb-4 border-b pb-2 text-center"></h3><div id="procedure-content-area" class="space-y-3"></div><button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">戻る</button></div></div>
+        <div id="quiz-screen" class="hidden"><div class="card p-5 border-t-8 border-red-500"><h3 id="quiz-item-name" class="text-3xl font-black mb-4 text-center"></h3><div id="quiz-choices-area" class="grid gap-3"></div><div id="quiz-feedback" class="mt-4 p-4 rounded-lg text-center font-bold hidden"></div><button id="next-from-quiz-btn" onclick="handleBack()" class="mt-6 w-full py-4 bg-red-500 text-white rounded-xl font-bold hidden">次へ</button></div></div>
+        <div id="portion-screen" class="hidden"><div class="card p-5 theme-portion border-t-8"><h3 id="portion-title" class="text-2xl font-black mb-4 border-b pb-2 text-center text-green-700"></h3><div id="portion-list-area" class="space-y-1"></div><button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">戻る</button></div></div>
+
+        <div id="shift-screen" class="hidden">
+            <div class="card p-5 theme-shift border-t-8 text-center">
+                <h3 class="text-2xl font-black mb-4 text-purple-700">📅 シフト表</h3>
+                
+                <div class="space-y-4 text-left">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 ml-1">▼ 1日 〜 15日</span>
+                        <div class="mt-1 bg-gray-100 rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden border-2 border-purple-200">
+                            <img id="shift-display-img-1" src="" class="w-full h-auto" alt="読み込み中..." onclick="window.open(this.src, '_blank')">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 ml-1">▼ 16日 〜 末日</span>
+                        <div class="mt-1 bg-gray-100 rounded-lg min-h-[200px] flex items-center justify-center overflow-hidden border-2 border-purple-200">
+                            <img id="shift-display-img-2" src="" class="w-full h-auto" alt="読み込み中..." onclick="window.open(this.src, '_blank')">
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-[10px] text-gray-400 my-6">画像クリックで拡大。表示が古い場合は再読み込みしてください。</p>
+                <button onclick="handleBack()" class="w-full py-4 bg-gray-800 text-white rounded-xl font-bold">メニューに戻る</button>
+            </div>
         </div>
     </div>
-
-    <div id="portion-screen" class="hidden">
-        <div class="card p-5 theme-portion border-t-8">
-            <h3 id="portion-title" class="text-2xl font-black mb-4 border-b pb-2 text-center text-green-700"></h3>
-            <div id="portion-list-area" class="space-y-1"></div>
-            <button onclick="handleBack()" class="mt-8 w-full py-4 bg-gray-800 text-white rounded-xl font-bold">リストに戻る</button>
-        </div>
-    </div>
-
 </div>
 
 <script>
+    // ==========================================
+    // 管理者設定エリア（ここを書き換えてください）
+    // ==========================================
+    const CORRECT_PASSWORD = '1405'; 
+    const SHIFT_IMAGE_URL_1 = 'https://drive.google.com/file/d/1zHH3IqT30XMp83ft2s6X7oAM-8ySHNNP/view?usp=drive_link'; // ここに1枚目(1-15日)のリンク
+    const SHIFT_IMAGE_URL_2 = 'https://drive.google.com/file/d/1J-N8B4IvyShS9qhQTNpTsvL67wxqFihk/view?usp=drive_link'; // ここに2枚目(16-末日)のリンク
+    const SHIFT_UPDATE_TIME = '2024/03/12 18:00 更新'; 
+
+    function checkPassword() {
+        const input = document.getElementById('password-input').value;
+        if (input === CORRECT_PASSWORD) {
+            document.getElementById('lock-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            document.getElementById('update-time-display').textContent = SHIFT_UPDATE_TIME;
+        } else {
+            document.getElementById('error-msg').classList.remove('hidden');
+            document.getElementById('lock-screen').classList.add('shake');
+            setTimeout(() => document.getElementById('lock-screen').classList.remove('shake'), 500);
+        }
+    }
+
+    // シフト画像を表示する（URL自動変換付き）
+    function showShiftScreen() {
+        renderShiftImage('shift-display-img-1', SHIFT_IMAGE_URL_1);
+        renderShiftImage('shift-display-img-2', SHIFT_IMAGE_URL_2);
+        showScreen('shift-screen');
+    }
+
+    function renderShiftImage(elementId, rawUrl) {
+        const img = document.getElementById(elementId);
+        let fileId = "";
+        if (rawUrl.includes('/d/')) {
+            fileId = rawUrl.split('/d/')[1].split('/')[0];
+        } else if (rawUrl.includes('id=')) {
+            fileId = rawUrl.split('id=')[1].split('&')[0];
+        }
+
+        if (fileId) {
+            // Googleドライブの制限を回避するURL形式
+            img.src = `https://drive.google.com/thumbnail?authuser=0&sz=w1000&id=${fileId}`;
+        } else {
+            img.src = rawUrl;
+        }
+    }
+
+    // --- メニューデータ ---
     const quizzes = [
-        // --- 刺し場 手順 ---
+        // 刺し場
         { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる' },
-        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(40g)を盛り付け' },
+        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'] },
+        { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(30g)を盛り付け' },
         { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '半分にした大葉 梅クラゲ(30g)を盛り付け' },
         { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '半分にした大葉 チャンジャ(30g)を盛り付け、ネギ〆' },
-        { "difficulty": "single_star", "name": "皮ぽん/蒸し鶏ぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', '鶏皮/蒸し鶏盛りつけ', 'ネギ、大根おろし','ポン酢'] },
-        { "difficulty": "single_star", "name": "えのきぽん", "type": "reordering", "steps": ['えのき600w40秒か500w50秒だぞ！🤓', 'ネギ、大根おろし','ポン酢'] },
+        { "difficulty": "single_star", "name": "かわぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'とりかわ盛りつけ', 'ネギ、大根おろし','ポン酢'] },
+        { "difficulty": "single_star", "name": "えのきぽん", "type": "reordering", "steps": ['大葉を敷く', 'オニスラ', 'えのき盛りつけ', 'ネギ、大根おろし','ポン酢'] },
         { "difficulty": "single_star", "name": "無限ピーマン", "type": "multiple_choice", "answer": 'ごま油、塩、塩昆布、白ごま' },
         { "difficulty": "single_star", "name": "漬物盛合せ", "type": "multiple_choice", "answer": 'たくあん30g、かっぱ30g、しば漬け30g' },
         { "difficulty": "single_star", "name": "長芋わさび", "type": "multiple_choice", "answer": '器に長いもを80g盛り、刻みのり〆' },
@@ -108,13 +158,11 @@
         { "difficulty": "single_star", "name": "鶏梅肉和え", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60G梅肉を混ぜて盛り付ける','のり'] },
         { "difficulty": "single_star", "name": "鶏ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', 'ユッケタレをかける','生うずら','ネギと白ごま'] },
         { "difficulty": "single_star", "name": "鶏塩ユッケ", "type": "reordering", "steps": ['皿に大葉を乗せる','オニスラを盛る' , 'ユッケ60g盛る', '塩だれをかける','生うずら','ネギと白ごま'] },
-        { "difficulty": "single_star", "name": "炙りしめさば", "type": "multiple_choice", "answer": '解凍した鯖に切れ目を入れ8等分 炙ってオニスラ大葉に盛り付け わさび' },
         { "difficulty": "single_star", "name": "出汁巻きたまご", "type": "multiple_choice", "answer": '600W 4分 笹葉の上に盛り付けて おろし大根 〆' },
-        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースに蒸し鶏1ポーション 胡麻ドレッシング〆' },
+        { "difficulty": "single_star", "name": "蒸し鶏サラダ", "type": "multiple_choice", "answer": 'サラダベースにささみ４個 胡麻ドレッシング〆' },
         { "difficulty": "single_star", "name": "豆腐と塩昆布のサラダ", "type": "multiple_choice", "answer": 'サラダベースに4等分の豆腐と塩昆布 和風ドレッシング、かつお節〆' },
         { "difficulty": "single_star", "name": "温玉シーザーサラダ", "type": "multiple_choice", "answer": 'サラダベースに温玉１個、クルトン、粉チーズかけて シーザードレッシング〆' },
-
-        // --- 揚げ場 手順 ---
+        // 揚げ場
         { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる 塩ふりかけ、ケチャップ" },
         { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる バター ハチミツとパセリ' },
         { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ パセリ' },
@@ -124,8 +172,7 @@
         { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる 天紙の上に６等分してネギ、しょうが" },
         { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉5分間揚げる サラダの上に盛り付け レモン、マヨネーズ" },
         { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "5分間揚げる 4等分にしてサラダの上に盛り付け、タルタル 南蛮酢 レモン、パセリ" },
-
-        // --- 焼き場 クイズ ---
+        // 焼き場（クイズ）
         { "difficulty": "triple_star", "name": "レタス巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
         { "difficulty": "triple_star", "name": "ヤンコン巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
         { "difficulty": "triple_star", "name": "えのき巻き", "answer": 'ポン酢', "dummies": ['塩コショウ', 'タレ','梅肉','バジル','明太マヨ'] },
@@ -135,11 +182,11 @@
         { "difficulty": "triple_star", "name": "トマトチーズ巻き", "answer": 'バジル', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','明太マヨ'] },
         { "difficulty": "triple_star", "name": "なすチーズ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','バジル','明太マヨ'] },
         { "difficulty": "triple_star", "name": "白ネギ巻き", "answer": 'タレ', "dummies": ['塩コショウ','ポン酢','梅肉','バジル','明太マヨ'] },
-        { "difficulty": "triple_star", "name": "えびの肉巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
-        { "difficulty": "triple_star", "name": "モッツァレラチーズ巻き", "answer": '塩コショウ', "dummies": ['タレ','ポン酢','梅肉','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "えびの肉巻き(タルタル)", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
+        { "difficulty": "triple_star", "name": "モッツァレラチーズ巻き", "answer": '塩コショウ', "dummies": ['ポン酢','梅肉','バジル','明太マヨ'] },
         { "difficulty": "triple_star", "name": "長芋明太マヨ巻き", "answer": '明太マヨ', "dummies": ['塩コショウ', 'タレ', 'ポン酢','梅肉','バジル'] },
-
-        // --- ポーションデータ (追加分) ---
+        { "difficulty": "triple_star", "name": "オクラの肉巻き", "answer": '塩コショウ', "dummies": ['タレ', 'ポン酢','梅肉','バジル','明太マヨ'] },
+        // ポーション
         { "difficulty": "portion", "name": "刺し場・野菜", "data": [
             { "item": "ピーマン", "amount": "40", "unit": "g" },
             { "item": "きゅうり", "amount": "85-90", "unit": "g" },
@@ -178,117 +225,78 @@
     ];
 
     let currentDifficulty = '';
-
-    function showScreen(screenId) {
-        ['difficulty-select', 'menu-list-screen', 'procedure-screen', 'quiz-screen', 'portion-screen'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.classList.toggle('hidden', id !== screenId);
+    function showScreen(id) {
+        ['difficulty-select', 'menu-list-screen', 'procedure-screen', 'quiz-screen', 'portion-screen', 'shift-screen'].forEach(s => {
+            const el = document.getElementById(s);
+            if(el) el.classList.toggle('hidden', s !== id);
         });
-        document.getElementById('global-back-btn').classList.toggle('hidden', screenId === 'difficulty-select');
+        document.getElementById('global-back-btn').classList.toggle('hidden', id === 'difficulty-select');
+        document.getElementById('top-update-banner').classList.toggle('hidden', id !== 'difficulty-select');
     }
-
-    function selectCategory(diff) {
-        currentDifficulty = diff;
-        renderMenuList();
-    }
-
+    function selectCategory(diff) { currentDifficulty = diff; renderMenuList(); }
     function handleBack() {
-        const current = getCurrentScreen();
-        if (['procedure-screen', 'quiz-screen', 'portion-screen'].includes(current)) {
-            renderMenuList();
-        } else {
-            showScreen('difficulty-select');
-        }
+        const cur = getCurrentScreen();
+        if(['procedure-screen', 'quiz-screen', 'portion-screen', 'shift-screen'].includes(cur)) {
+            if(cur === 'shift-screen') showScreen('difficulty-select'); else renderMenuList();
+        } else showScreen('difficulty-select');
     }
-
     function getCurrentScreen() {
-        if (!document.getElementById('portion-screen').classList.contains('hidden')) return 'portion-screen';
-        if (!document.getElementById('procedure-screen').classList.contains('hidden')) return 'procedure-screen';
-        if (!document.getElementById('quiz-screen').classList.contains('hidden')) return 'quiz-screen';
-        if (!document.getElementById('menu-list-screen').classList.contains('hidden')) return 'menu-list-screen';
+        if(!document.getElementById('shift-screen').classList.contains('hidden')) return 'shift-screen';
+        if(!document.getElementById('portion-screen').classList.contains('hidden')) return 'portion-screen';
+        if(!document.getElementById('procedure-screen').classList.contains('hidden')) return 'procedure-screen';
+        if(!document.getElementById('quiz-screen').classList.contains('hidden')) return 'quiz-screen';
+        if(!document.getElementById('menu-list-screen').classList.contains('hidden')) return 'menu-list-screen';
         return 'difficulty-select';
     }
-
     function renderMenuList() {
-        const area = document.getElementById('menu-options-area');
-        area.innerHTML = '';
+        const area = document.getElementById('menu-options-area'); area.innerHTML = '';
         const filtered = quizzes.filter(q => q.difficulty === currentDifficulty);
         const names = { 'single_star': '刺し場', 'double_star': '揚げ場', 'triple_star': '焼き場', 'portion': 'ポーション' };
         document.getElementById('menu-list-heading').textContent = `【${names[currentDifficulty]}】選択`;
-
         filtered.forEach(quiz => {
             const btn = document.createElement('button');
-            btn.className = 'w-full text-left p-4 card hover:bg-gray-50 flex justify-between items-center font-bold text-gray-700 active:bg-gray-100 transition-colors';
-            btn.innerHTML = `${quiz.name} <span class="text-gray-400 font-normal">▶︎</span>`;
-            
+            btn.className = 'w-full text-left p-4 card flex justify-between items-center font-bold text-gray-700 active:bg-gray-100';
+            btn.innerHTML = `${quiz.name} <span class="text-gray-400">▶︎</span>`;
             btn.onclick = () => {
-                if (currentDifficulty === 'portion') showPortion(quiz);
-                else if (currentDifficulty === 'triple_star') startQuiz(quiz);
+                if(currentDifficulty === 'portion') showPortion(quiz);
+                else if(currentDifficulty === 'triple_star') startQuiz(quiz);
                 else showProcedure(quiz);
             };
             area.appendChild(btn);
         });
         showScreen('menu-list-screen');
     }
-
     function showProcedure(quiz) {
         const card = document.getElementById('procedure-card');
         card.className = `card p-5 theme-${quiz.difficulty} border-t-8`;
         document.getElementById('procedure-name').textContent = quiz.name;
-        const contentArea = document.getElementById('procedure-content-area');
-        contentArea.innerHTML = '';
-
-        if (quiz.type === 'multiple_choice') {
-            contentArea.innerHTML = `<div class="p-6 bg-blue-50 text-blue-800 text-xl font-bold rounded-xl text-center shadow-inner border border-blue-200">${quiz.answer}</div>`;
-        } else {
-            quiz.steps.forEach((step, i) => {
-                contentArea.innerHTML += `<div class="step-bubble p-4 rounded-xl flex gap-3 items-center">
-                    <span class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">${i+1}</span>
-                    <span class="text-lg font-bold text-gray-800">${step}</span>
-                </div>`;
-            });
-        }
+        const area = document.getElementById('procedure-content-area'); area.innerHTML = '';
+        if(quiz.type === 'multiple_choice') area.innerHTML = `<div class="p-6 bg-blue-50 text-blue-800 text-xl font-bold rounded-xl text-center border border-blue-200">${quiz.answer}</div>`;
+        else quiz.steps.forEach((s, i) => { area.innerHTML += `<div class="step-bubble p-4 rounded-xl flex gap-3 items-center"><span class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">${i+1}</span><span class="text-lg font-bold text-gray-800">${s}</span></div>`; });
         showScreen('procedure-screen');
     }
-
     function showPortion(quiz) {
         document.getElementById('portion-title').textContent = quiz.name;
-        const area = document.getElementById('portion-list-area');
-        area.innerHTML = '';
-
-        quiz.data.forEach(d => {
-            area.innerHTML += `
-                <div class="portion-row flex justify-between items-center">
-                    <span class="text-lg font-bold text-gray-600">${d.item}</span>
-                    <div class="flex items-baseline">
-                        <span class="text-3xl font-black text-green-600">${d.amount}</span>
-                        <span class="text-sm font-bold text-gray-400 ml-1">${d.unit}</span>
-                    </div>
-                </div>`;
-        });
+        const area = document.getElementById('portion-list-area'); area.innerHTML = '';
+        quiz.data.forEach(d => { area.innerHTML += `<div class="portion-row flex justify-between items-center"><span class="text-lg font-bold text-gray-600">${d.item}</span><div class="flex items-baseline"><span class="text-3xl font-black text-green-600">${d.amount}</span><span class="text-sm font-bold text-gray-400 ml-1">${d.unit}</span></div></div>`; });
         showScreen('portion-screen');
     }
-
     function startQuiz(quiz) {
         document.getElementById('quiz-item-name').textContent = quiz.name;
         const area = document.getElementById('quiz-choices-area');
         const feedback = document.getElementById('quiz-feedback');
         const nextBtn = document.getElementById('next-from-quiz-btn');
         area.innerHTML = ''; feedback.classList.add('hidden'); nextBtn.classList.add('hidden');
-
         const choices = [quiz.answer, ...quiz.dummies].sort(() => Math.random() - 0.5);
-        choices.forEach(choice => {
+        choices.forEach(c => {
             const btn = document.createElement('button');
-            btn.className = 'w-full p-4 card border-2 border-gray-100 text-lg font-bold active:bg-gray-100 transition-all';
-            btn.textContent = choice;
+            btn.className = 'w-full p-4 card border-2 border-gray-100 text-lg font-bold active:bg-gray-100';
+            btn.textContent = c;
             btn.onclick = () => {
-                const isCorrect = choice === quiz.answer;
-                if (isCorrect) {
+                if(c === quiz.answer) {
                     btn.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
-                    feedback.textContent = "正解です！";
-                    feedback.className = "mt-4 p-4 rounded-lg text-center font-bold bg-green-100 text-green-700";
-                    nextBtn.classList.remove('hidden');
-                    Array.from(area.children).forEach(b => b.disabled = true);
+                    feedback.textContent = "正解です！"; feedback.className = "mt-4 p-4 rounded-lg text-center font-bold bg-green-100 text-green-700";
+                    nextBtn.classList.remove('hidden'); Array.from(area.children).forEach(b => b.disabled = true);
                 } else {
                     btn.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
                     feedback.innerHTML = `違います！<br><span class="text-sm font-normal text-red-500">正解は【${quiz.answer}】</span>`;
@@ -300,19 +308,7 @@
         });
         showScreen('quiz-screen');
     }
-
     document.getElementById('global-back-btn').onclick = handleBack;
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
