@@ -74,7 +74,11 @@
 
         <div id="shift-screen" class="hidden">
             <div class="card p-5 border-t-8 border-purple-500 text-center">
-                <h3 class="text-2xl font-black mb-4 text-purple-700">📅 シフト表</h3>
+                <h3 class="text-2xl font-black text-purple-700">📅 シフト表</h3>
+                <div class="mb-4 inline-block px-3 py-1 bg-purple-50 rounded-full border border-purple-100">
+                    <span id="shift-update-time-display" class="text-[10px] font-bold text-purple-600">---</span>
+                </div>
+                
                 <div class="space-y-4 text-left">
                     <div>
                         <span class="text-xs font-bold text-purple-500 ml-1">▼ 1日 〜 15日</span>
@@ -106,7 +110,9 @@
         if (input === CORRECT_PASSWORD) {
             document.getElementById('lock-screen').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
+            // 両方の表示箇所に時間をセット
             document.getElementById('update-time-display').textContent = SHIFT_UPDATE_TIME;
+            document.getElementById('shift-update-time-display').textContent = SHIFT_UPDATE_TIME;
         } else {
             document.getElementById('error-msg').classList.remove('hidden');
             document.getElementById('lock-screen').classList.add('shake');
@@ -129,20 +135,15 @@
         filtered.forEach((quiz, index) => {
             const container = document.createElement('div');
             container.className = 'card menu-item overflow-hidden border-l-4 border-transparent transition-all';
-            
-            // カテゴリごとの色設定
             const accentColors = { 'single_star': 'border-blue-500', 'double_star': 'border-orange-500', 'triple_star': 'border-red-500', 'portion': 'border-green-500' };
 
-            // 見出しボタン
             const btn = document.createElement('button');
             btn.className = 'w-full text-left p-4 flex justify-between items-center font-bold text-gray-700 active:bg-gray-50';
             btn.innerHTML = `<span>${quiz.name}</span><span class="text-xs transition-transform arrow">▼</span>`;
             
-            // 隠れているコンテンツエリア
             const content = document.createElement('div');
             content.className = 'accordion-content px-4';
             
-            // 内容の構築
             if (currentDifficulty === 'portion') {
                 let html = '<div class="space-y-1">';
                 quiz.data.forEach(d => {
@@ -163,7 +164,6 @@
 
             btn.onclick = () => {
                 const isOpen = content.classList.contains('open');
-                // 全て閉じる
                 document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
                 document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active', accentColors[currentDifficulty]));
                 document.querySelectorAll('.arrow').forEach(a => a.style.transform = 'rotate(0deg)');
@@ -172,7 +172,6 @@
                     content.classList.add('open');
                     container.classList.add('active', accentColors[currentDifficulty]);
                     btn.querySelector('.arrow').style.transform = 'rotate(180deg)';
-                    // 開いた位置にスクロール
                     setTimeout(() => container.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
                 }
             };
@@ -210,11 +209,9 @@
     function handleBack() { showScreen('difficulty-select'); }
     document.getElementById('global-back-btn').onclick = handleBack;
 
-    // メニューデータ
     const quizzes = [
         // 刺し場
         { "difficulty": "single_star", "name": "枝豆", "type": "multiple_choice", "answer": '500W 2分 皿に盛り付けて塩をふる' },
-        { "difficulty": "single_star", "name": "冷やしトマト", "type": "reordering", "steps": ['トマト１個を半分に切りヘタ部分を取り除く','トマトを６等分に切る','マヨネーズとサラダを添える'] },
         { "difficulty": "single_star", "name": "たこわさ", "type": "multiple_choice", "answer": '半分にした大葉 たこわさ(40g)を盛り付け' },
         { "difficulty": "single_star", "name": "梅クラゲ", "type": "multiple_choice", "answer": '半分にした大葉 梅クラゲ(30g)を盛り付け' },
         { "difficulty": "single_star", "name": "チャンジャ", "type": "multiple_choice", "answer": '半分にした大葉 チャンジャ(30g)を盛り付け、ネギ〆' },
@@ -237,13 +234,14 @@
         // 揚げ場
         { "difficulty": "double_star", "name": "ポテトフライ", "type": "multiple_choice", "answer": "2分30秒間揚げる 塩ふりかけ、ケチャップ" },
         { "difficulty": "double_star", "name": "さつまバター", "type": "multiple_choice", "answer": '4分間揚げる バター ハチミツとパセリ' },
-        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ パセリ' },
+        { "difficulty": "double_star", "name": "もろこし唐揚げ", "type": "multiple_choice", "answer": '3分間揚げる 塩ふりかけ 皿に天紙、パセリ' },
         { "difficulty": "double_star", "name": "名古屋風手羽先唐揚げ", "type": "multiple_choice", "answer": '500W1分 片栗粉5分間揚げる キャベツの上に盛り付けて手羽タレ、コショウ、白ごま' },
-        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉2分間揚げる レモン" },
-        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "500W1分 片栗粉+唐揚げ粉2分間揚げる レモン" },
-        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる 天紙の上に６等分してネギ、しょうが" },
+        { "difficulty": "double_star", "name": "なんこつ唐揚げ", "type": "multiple_choice", "answer": "唐揚げ粉2分間揚げる 皿に天紙、レモン" },
+        { "difficulty": "double_star", "name": "かわパリ", "type": "multiple_choice", "answer": "500W1分 片栗粉+唐揚げ粉2分間揚げる 皿に天紙、レモン" },
+        { "difficulty": "double_star", "name": "じゃこ天", "type": "multiple_choice", "answer": "両面3分間揚げる ６等分して天紙の上に盛り付け、ネギ、しょうが" },
         { "difficulty": "double_star", "name": "若鶏のからあげ", "type": "multiple_choice", "answer": "片栗粉5分間揚げる サラダの上に盛り付け レモン、マヨネーズ" },
         { "difficulty": "double_star", "name": "チキン南蛮", "type": "multiple_choice", "answer": "500W1分 5分間揚げる 4等分にしてサラダの上に盛り付け、タルタル 南蛮酢 レモン、パセリ" },
+        { "difficulty": "double_star", "name": "えびせん", "type": "multiple_choice", "answer": "10枚揚げる 皿に天紙置いて盛り付け" },
         // 焼き場
         { "difficulty": "triple_star", "name": "レタス巻き", "answer": '塩コショウ' },
         { "difficulty": "triple_star", "name": "ヤンコン巻き", "answer": '塩コショウ' },
